@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha3.Core.Settings
+﻿namespace GoogleReCaptcha3.Core.Settings
 {
 	public interface IReCaptchaV3Settings
 	{

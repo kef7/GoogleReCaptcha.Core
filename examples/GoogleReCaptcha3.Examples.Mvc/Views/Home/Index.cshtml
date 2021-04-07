@@ -9,7 +9,6 @@
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 
 	@* Google ReCaptcha v3 Script *@
-	@*<script src="https://www.google.com/recaptcha/api.js"></script>*@
 	<g-recaptcha-script></g-recaptcha-script>
 	<script src="~/js/home.js"></script>
 }
@@ -39,12 +38,6 @@
 	</div>
 
 	<div class="offset-sm-2 offset-xxl-1 pl-1">
-		@*<button class="btn btn-primary g-recaptcha"
-					data-sitekey="6Ld0oJ0aAAAAAMhlrv3dq9ECKtFjKXijWRjdjUvg"
-					data-callback="onCaptchaedSubmit"
-					data-action="submit">
-				Submit
-			</button>*@
 		<g-recaptcha-submit-button class="btn btn-primary g-recaptcha">Submit</g-recaptcha-submit-button>
 	</div>
 
