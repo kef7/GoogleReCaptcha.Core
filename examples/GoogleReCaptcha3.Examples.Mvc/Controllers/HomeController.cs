@@ -1,11 +1,6 @@
 ﻿using GoogleReCaptcha3.Core.Services;
-using GoogleReCaptcha3.Core.Settings;
 using GoogleReCaptcha3.Examples.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha3.Examples.Mvc.Controllers
 {

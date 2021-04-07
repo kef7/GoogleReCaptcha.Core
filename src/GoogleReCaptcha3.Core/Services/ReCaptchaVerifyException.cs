@@ -1,7 +1,5 @@
 ﻿using GoogleReCaptcha3.Core.Services.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GoogleReCaptcha3.Core.Services
 {
