@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>GoogleReCaptcha3.Examples.Mvc</AssemblyName>
+    <RootNamespace>GoogleReCaptcha3.Examples.Mvc</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GoogleReCaptcha3.Core\GoogleReCaptcha3.Core.csproj" />
+  </ItemGroup>
+
+</Project>
