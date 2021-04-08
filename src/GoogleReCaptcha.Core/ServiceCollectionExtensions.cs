@@ -1,5 +1,5 @@
-﻿using GoogleReCaptcha3.Core.Services;
-using GoogleReCaptcha3.Core.Settings;
+﻿using GoogleReCaptcha.Core.Services;
+using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 
-namespace GoogleReCaptcha3.Core
+namespace GoogleReCaptcha.Core
 {
 	public static class ServiceCollectionExtensions
 	{

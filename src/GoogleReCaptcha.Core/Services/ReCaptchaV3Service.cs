@@ -1,5 +1,5 @@
-﻿using GoogleReCaptcha3.Core.Services.Models;
-using GoogleReCaptcha3.Core.Settings;
+﻿using GoogleReCaptcha.Core.Services.Models;
+using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace GoogleReCaptcha3.Core.Services
+namespace GoogleReCaptcha.Core.Services
 {
 	/// <summary>
 	/// Service for Google ReCaptcha V3; can verify user token with Google if configured correctly

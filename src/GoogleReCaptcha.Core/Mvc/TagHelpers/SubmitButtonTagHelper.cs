@@ -1,11 +1,11 @@
-﻿using GoogleReCaptcha3.Core.Settings;
+﻿using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Threading.Tasks;
 
-namespace GoogleReCaptcha3.Core.Mvc.TagHelpers
+namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
 	/// <summary>
 	/// Tag helper to assist in adding Google ReCaptcah v3 data attributes from settings configured in appsettings.json

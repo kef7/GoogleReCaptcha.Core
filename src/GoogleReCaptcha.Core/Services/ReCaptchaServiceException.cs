@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoogleReCaptcha3.Core.Services
+namespace GoogleReCaptcha.Core.Services
 {
 	public class ReCaptchaServiceException : Exception
 	{

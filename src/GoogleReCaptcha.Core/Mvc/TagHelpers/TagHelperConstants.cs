@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GoogleReCaptcha3.Core.Mvc.TagHelpers
+namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
 	public static class TagHelperConstants
 	{
