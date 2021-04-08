@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleReCaptcha3.Examples.Mvc", "examples\GoogleReCaptcha3.Examples.Mvc\GoogleReCaptcha3.Examples.Mvc.csproj", "{13A9EAF9-49DC-4A55-989F-FC6C570175F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleReCaptcha.Examples.Mvc", "examples\GoogleReCaptcha.Examples.Mvc\GoogleReCaptcha.Examples.Mvc.csproj", "{13A9EAF9-49DC-4A55-989F-FC6C570175F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleReCaptcha3.Core", "src\GoogleReCaptcha3.Core\GoogleReCaptcha3.Core.csproj", "{18F79A6C-A54D-4485-8467-149E71BAE8A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleReCaptcha.Core", "src\GoogleReCaptcha.Core\GoogleReCaptcha.Core.csproj", "{18F79A6C-A54D-4485-8467-149E71BAE8A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

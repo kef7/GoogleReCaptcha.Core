@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GoogleReCaptcha3.Core\GoogleReCaptcha3.Core.csproj" />
+    <ProjectReference Include="..\..\src\GoogleReCaptcha.Core\GoogleReCaptcha.Core.csproj" />
   </ItemGroup>
 
 </Project>
