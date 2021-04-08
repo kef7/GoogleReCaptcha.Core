@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace GoogleReCaptcha3.Examples.Mvc
+namespace GoogleReCaptcha.Examples.Mvc
 {
 	public class Program
 	{

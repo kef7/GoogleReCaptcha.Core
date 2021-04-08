@@ -1,4 +1,4 @@
-﻿namespace GoogleReCaptcha3.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
 	public interface IReCaptchaV3Settings
 	{

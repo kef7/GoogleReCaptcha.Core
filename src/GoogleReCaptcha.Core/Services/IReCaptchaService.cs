@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace GoogleReCaptcha3.Core.Services
+namespace GoogleReCaptcha.Core.Services
 {
 	public interface IReCaptchaService
 	{

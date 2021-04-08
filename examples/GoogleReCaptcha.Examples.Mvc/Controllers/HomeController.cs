@@ -1,8 +1,8 @@
-﻿using GoogleReCaptcha3.Core.Services;
-using GoogleReCaptcha3.Examples.Mvc.Models;
+﻿using GoogleReCaptcha.Core.Services;
+using GoogleReCaptcha.Examples.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GoogleReCaptcha3.Examples.Mvc.Controllers
+namespace GoogleReCaptcha.Examples.Mvc.Controllers
 {
 	public class HomeController : Controller
 	{

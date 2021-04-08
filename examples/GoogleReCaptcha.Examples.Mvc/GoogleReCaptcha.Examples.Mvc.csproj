@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>GoogleReCaptcha3.Examples.Mvc</AssemblyName>
-    <RootNamespace>GoogleReCaptcha3.Examples.Mvc</RootNamespace>
+    <AssemblyName>GoogleReCaptcha.Examples.Mvc</AssemblyName>
+    <RootNamespace>GoogleReCaptcha.Examples.Mvc</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

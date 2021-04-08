@@ -1,7 +1,7 @@
-﻿using GoogleReCaptcha3.Core.Services.Models;
+﻿using GoogleReCaptcha.Core.Services.Models;
 using System;
 
-namespace GoogleReCaptcha3.Core.Services
+namespace GoogleReCaptcha.Core.Services
 {
 	public class ReCaptchaVerifyException : Exception
 	{

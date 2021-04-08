@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GoogleReCaptcha3.Core.Services
+namespace GoogleReCaptcha.Core.Services
 {
 	/// <summary>
 	/// Verify error codes that can be returned by Google's verify API endpoint

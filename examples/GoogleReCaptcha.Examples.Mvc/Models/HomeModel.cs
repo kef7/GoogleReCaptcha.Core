@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GoogleReCaptcha3.Examples.Mvc.Models
+namespace GoogleReCaptcha.Examples.Mvc.Models
 {
 	public class HomeModel
 	{
