@@ -1,7 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+	<PackageId>GoogleReCaptcha.Core</PackageId>
+	<Version>0.1.0</Version>
+	<Authors>kef7</Authors>
+	<Description>ASP.NET Core/5 MVC support for Google ReCaptcha (.NET Standard 2.1)</Description>
+	<IsPackable>true</IsPackable>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +17,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)">
+		  <Visible>false</Visible>
+	  </None>
   </ItemGroup>
 
 </Project>
