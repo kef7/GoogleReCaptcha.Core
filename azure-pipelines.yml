@@ -56,5 +56,5 @@ steps:
     git config --global --add url."git@github.com:".insteadOf "https://github.com/"
     git remote add upstream https://github.com/kef7/GoogleReCaptcha.Core.git
     git branch -M master
-    git push -u upstream master
-  displayName: 'powershell push to github'
+    git push -u upstream master:main
+  displayName: 'powershell git push to github'
