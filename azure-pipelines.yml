@@ -11,9 +11,7 @@ pool:
 
 # Variables for build and pack
 variables:
-  buildConfiguration: 'Release'
-  projectName: 'Google ReCaptcha DotNet'
-  feedName: 'TestFeed'
+- group: 'GoogleReCaptcha.Core__VarGroup'
 
 # Init steps
 steps:
@@ -49,3 +47,14 @@ steps:
     publishVstsFeed: '$(projectName)/$(feedName)'
     versioningScheme: off
     allowPackageConflicts: true
+
+# Push master branch to GitHub
+- powershell: |
+    Add-Content "$HOME\.git-credentials" "https://$(gitHubKey):x-oauth-basic@github.com"
+    git config --global user.name "$(gitHubUser)"
+    git config --global user.email "$(gitHubEmail)"
+    git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+    git remote add upstream https://github.com/kef7/GoogleReCaptcha.Core.git
+    git branch -M master
+    git push -u upstream master
+  displayName: 'powershell push to github'
