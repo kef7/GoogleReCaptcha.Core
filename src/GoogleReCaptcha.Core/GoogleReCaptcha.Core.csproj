@@ -7,8 +7,10 @@
 	<Authors>kef7</Authors>
 	<Description>ASP.NET Core/5 MVC support for Google ReCaptcha (.NET Standard 2.1)</Description>
 	<IsPackable>true</IsPackable>
-	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<PackageLicenseExpression>DBAD</PackageLicenseExpression>
+    <PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;ASP.NET MVC;</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
