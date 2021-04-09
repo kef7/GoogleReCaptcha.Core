@@ -12,6 +12,8 @@ pool:
 # Variables for build and pack
 variables:
   buildConfiguration: 'Release'
+  projectName: 'Google ReCaptcha DotNet'
+  feedName: 'TestFeed'
 
 # Init steps
 steps:
@@ -35,6 +37,8 @@ steps:
     versioningScheme: off
 
 # Push package
+- task: NuGetAuthenticate@0
+  displayName: 'nuget authenticate'
 - task: NuGetCommand@2
   displayName: 'nuget push'
   inputs:
@@ -42,6 +46,6 @@ steps:
     feedsToUse: select
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: internal
-    publishVstsFeed: 'TestFeed'
+    publishVstsFeed: '$(projectName)/$(feedName)'
     versioningScheme: off
     allowPackageConflicts: true
