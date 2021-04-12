@@ -44,6 +44,6 @@ namespace GoogleReCaptcha.Core.Services.Models
 		/// List of error codes during verify process; optional
 		/// </summary>
 		[JsonPropertyName("error-codes")]
-		public string[] ErrorCodes { get; set; } // TODO: Google says this prop is named "error-codes"; as it is now, this will not fill with data during deserialization
+		public string[] ErrorCodes { get; set; }
 	}
 }

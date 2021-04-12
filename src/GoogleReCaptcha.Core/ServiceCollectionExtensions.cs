@@ -26,7 +26,14 @@ namespace GoogleReCaptcha.Core
 			});
 
 			// Add IHttpClientFactory for ID
-			services.AddHttpClient();
+			services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT_NAME, (httpClient) =>
+			{
+				if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+				{
+					httpClient.BaseAddress = new Uri(settings.ApiUrl);
+				}
+				httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
+			});
 
 			// Add V3 service
 			services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
