@@ -21,6 +21,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-callback";
 		public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 
+		public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
+
 		#endregion
 
 		#region Fields
@@ -100,15 +102,35 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				CallBack = "onGReCaptchaV3Submit";
 			}
 
+			// Setup tag and base google attributes
 			output.TagName = "button";
 			output.Attributes.SetAttribute("data-action", Action);
 			output.Attributes.SetAttribute("data-callback", CallBack);
 			output.Attributes.SetAttribute("data-sitekey", SiteKey);
+
+			// Apply class attribute defaults
+			var classes = GetClasses(context);
+			output.Attributes.SetAttribute("class", classes);
 		}
 
 		#endregion
 
 		#region Methods
+
+		protected string GetClasses(TagHelperContext context)
+		{
+			var classes = DEFAULT_CLASS_ATTRS;
+			var classTagHelperAttr = context.AllAttributes["class"];
+			if (classTagHelperAttr != null)
+			{
+				var tmp = classTagHelperAttr.Value?.ToString();
+				if (!string.IsNullOrWhiteSpace(tmp))
+				{
+					classes = classes + " " + tmp;
+				}
+			}
+			return classes;
+		}
 
 		#endregion
 	}
