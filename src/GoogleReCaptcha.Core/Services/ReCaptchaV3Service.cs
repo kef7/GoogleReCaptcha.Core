@@ -180,9 +180,6 @@ namespace GoogleReCaptcha.Core.Services
 				throw new ArgumentNullException(nameof(verifyRequestData));
 			}
 
-			// Build http reqeust message
-			var apiUrl = Settings.ApiUrl + "/siteverify";
-
 			// Build post content
 			var formContent = new FormUrlEncodedContent(new[]
 			{
@@ -192,11 +189,10 @@ namespace GoogleReCaptcha.Core.Services
 			});
 
 			// Create new http client
-			var httpClient = HttpClientFactory.CreateClient(); // TODO: Should we do a named http client here and in ServiceCollectionExtensions.cs that have all the basic of endpoint URI, and defautl headers etc..?
-			httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
+			var httpClient = HttpClientFactory.CreateClient(Constants.DEFAULT_HTTP_CLIENT_NAME);
 
 			// Get response
-			using var response = await httpClient.PostAsync(apiUrl, formContent);
+			using var response = await httpClient.PostAsync("siteverify", formContent);
 
 			// Parse response for data
 			if (response.IsSuccessStatusCode)
