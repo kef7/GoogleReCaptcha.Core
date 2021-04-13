@@ -29,17 +29,17 @@ namespace GoogleReCaptcha.Core.Services
 		/// <summary>
 		/// Get ReCaptcha V3 settings
 		/// </summary>
-		public IReCaptchaV3Settings Settings { get; }
+		protected virtual IReCaptchaV3Settings Settings { get; }
 
 		/// <summary>
 		/// Get current action context
 		/// </summary>
-		public ActionContext ActionContext { get; }
+		protected virtual ActionContext ActionContext { get; }
 
 		/// <summary>
 		/// Get http client factory to spawn http clients
 		/// </summary>
-		protected IHttpClientFactory HttpClientFactory { get; }
+		protected virtual IHttpClientFactory HttpClientFactory { get; }
 
 		#endregion
 
@@ -143,7 +143,7 @@ namespace GoogleReCaptcha.Core.Services
 		/// Get user IP or remote IP address from current action context
 		/// </summary>
 		/// <returns>User's IP or empty string if not found</returns>
-		private string GetUserIp()
+		protected virtual string GetUserIp()
 		{
 			if (ActionContext != null)
 			{
@@ -158,7 +158,7 @@ namespace GoogleReCaptcha.Core.Services
 		/// </summary>
 		/// <param name="token">User's verify token for request</param>
 		/// <returns>New request object with data from current settings and context</returns>
-		private VerifyRequest BuildRequestData(string token)
+		protected virtual VerifyRequest BuildRequestData(string token)
 		{
 			return new VerifyRequest
 			{
@@ -173,7 +173,7 @@ namespace GoogleReCaptcha.Core.Services
 		/// </summary>
 		/// <param name="verifyRequestData">The verify response data to send to API endpoint</param>
 		/// <returns>Verify response object or null if nothing returned</returns>
-		private async Task<VerifyResponse> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
+		protected virtual async Task<VerifyResponse> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
 		{
 			if (verifyRequestData == null)
 			{
