@@ -2,7 +2,7 @@
 {
 	public class ReCaptchaV3Settings : IReCaptchaV3Settings
 	{
-		public bool Enabled { get; set; } // TODO: Make this enabled flag work in settings, tag helpers, and services.
+		public bool Enabled { get; set; }
 		public string LibUrl { get; set; }
 		public string ApiUrl { get; set; }
 		public string SiteKey { get; set; }
