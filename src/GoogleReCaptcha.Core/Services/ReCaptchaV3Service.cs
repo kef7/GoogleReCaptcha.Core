@@ -99,8 +99,6 @@ namespace GoogleReCaptcha.Core.Services
 		/// <returns>True if token was verified; false otherwise</returns>
 		public bool Verify()
 		{
-			// TODO: How to handle Verify() call if Settings, ActionContext, or HttpClientFactory are null? Always return true?
-
 			// Enabled?
 			if (!Settings.Enabled)
 			{
@@ -134,8 +132,6 @@ namespace GoogleReCaptcha.Core.Services
 		/// <returns>True if token was verified; false otherwise</returns>
 		public async Task<bool> VerifyAsync()
 		{
-			// TODO: How to handle Verify() call if Settings, ActionContext, or HttpClientFactory are null? Always return true?
-
 			// Enabled?
 			if (!Settings.Enabled)
 			{
