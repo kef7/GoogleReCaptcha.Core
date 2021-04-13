@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 
@@ -14,6 +15,9 @@ namespace GoogleReCaptcha.Core
 	{
 		private static void AddV3BaseServices(IServiceCollection services, IReCaptchaV3Settings settings)
 		{
+			// Add logging
+			services.AddLogging();
+
 			// Add IActionContextAccessor for IUrlHelper DI
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -39,11 +43,12 @@ namespace GoogleReCaptcha.Core
 			services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
 			{
 				// Get required services
+				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
 				var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
 				var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
 				// Build v3 service
-				var v3Service = new ReCaptchaV3Service(settings, actionContextAccessor, httpContextFactory);
+				var v3Service = new ReCaptchaV3Service(logger, settings, actionContextAccessor, httpContextFactory);
 				return v3Service;
 			});
 		}
