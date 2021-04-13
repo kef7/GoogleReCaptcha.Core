@@ -90,6 +90,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			if (!Settings.Enabled)
 			{
 				output.SuppressOutput();
+				return;
 			}
 
 			// Apply settings to props
