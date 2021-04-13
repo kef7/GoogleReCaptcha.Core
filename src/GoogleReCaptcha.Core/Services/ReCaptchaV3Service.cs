@@ -27,6 +27,9 @@ namespace GoogleReCaptcha.Core.Services
 
 		#region Properties
 
+		/// <summary>
+		/// Gets the ILogger
+		/// </summary>
 		protected virtual ILogger<ReCaptchaV3Service> Logger { get; }
 
 		/// <summary>
