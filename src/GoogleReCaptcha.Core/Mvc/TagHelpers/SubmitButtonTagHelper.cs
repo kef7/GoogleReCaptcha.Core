@@ -67,6 +67,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		public SubmitButtonTagHelper(IReCaptchaV3Settings settings)
 		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException(nameof(settings));
+			}
+
 			Settings = settings;
 		}
 
@@ -86,17 +91,26 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				throw new ArgumentNullException(nameof(output));
 			}
 
-			// Apply settings to props
-			if (Settings != null)
+			// Enabled?
+			if (!Settings.Enabled)
 			{
-				SiteKey = Settings.SiteKey ?? "?";
+				// Setup tag as non-recaptcha supported button
+				output.TagName = "button";
+
+				// Leave
+				return;
 			}
 
-			// Apply default to props
+			// Apply settings to props
+			SiteKey = Settings.SiteKey ?? "?";
+
+			// Apply default action
 			if (string.IsNullOrWhiteSpace(Action))
 			{
 				Action = "submit";
 			}
+
+			// Apply default callback
 			if (string.IsNullOrWhiteSpace(CallBack))
 			{
 				CallBack = "onGReCaptchaV3Submit";
@@ -108,8 +122,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			output.Attributes.SetAttribute("data-callback", CallBack);
 			output.Attributes.SetAttribute("data-sitekey", SiteKey);
 
-			// Apply class attribute defaults
-			var classes = GetClasses(context);
+			// Merge class attributes with defaults and apply
+			var classes = GetMergedClassAttributes(context);
 			output.Attributes.SetAttribute("class", classes);
 		}
 
@@ -117,7 +131,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Methods
 
-		protected string GetClasses(TagHelperContext context)
+		/// <summary>
+		/// Get and merge class attributes presnt with default class attributes required for Google ReCaptcha
+		/// </summary>
+		/// <param name="context">Tag helper context of the tag being processed</param>
+		/// <returns>String of all classes from current tag context and default</returns>
+		protected string GetMergedClassAttributes(TagHelperContext context)
 		{
 			var classes = DEFAULT_CLASS_ATTRS;
 			var classTagHelperAttr = context.AllAttributes["class"];
