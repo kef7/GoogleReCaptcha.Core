@@ -56,6 +56,16 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		public ScriptTagHelper(IReCaptchaV3Settings settings, IUrlHelper urlHelper)
 		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException(nameof(settings));
+			}
+
+			if (urlHelper == null)
+			{
+				throw new ArgumentNullException(nameof(urlHelper));
+			}
+
 			Settings = settings;
 			UrlHelper = urlHelper;
 		}
@@ -74,6 +84,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			if (output == null)
 			{
 				throw new ArgumentNullException(nameof(output));
+			}
+
+			// Enabled?
+			if (!Settings.Enabled)
+			{
+				output.SuppressOutput();
 			}
 
 			// Apply settings to props
