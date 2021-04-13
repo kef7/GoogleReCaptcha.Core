@@ -54,6 +54,19 @@ namespace GoogleReCaptcha.Core.Services
 		/// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's ReCaptcha API</param>
 		public ReCaptchaV3Service(IReCaptchaV3Settings settings, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
 		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException(nameof(settings));
+			}
+			if (actionContextAccessor == null)
+			{
+				throw new ArgumentNullException(nameof(actionContextAccessor));
+			}
+			if (httpClientFactory == null)
+			{
+				throw new ArgumentNullException(nameof(httpClientFactory));
+			}
+
 			Settings = settings;
 			ActionContext = actionContextAccessor?.ActionContext;
 			HttpClientFactory = httpClientFactory;
@@ -86,6 +99,12 @@ namespace GoogleReCaptcha.Core.Services
 		{
 			// TODO: How to handle Verify() call if Settings, ActionContext, or HttpClientFactory are null? Always return true?
 
+			// Enabled?
+			if (!Settings.Enabled)
+			{
+				return true;
+			}
+
 			var token = GetToken();
 			if (token != "")
 			{
@@ -114,6 +133,12 @@ namespace GoogleReCaptcha.Core.Services
 		public async Task<bool> VerifyAsync()
 		{
 			// TODO: How to handle Verify() call if Settings, ActionContext, or HttpClientFactory are null? Always return true?
+
+			// Enabled?
+			if (!Settings.Enabled)
+			{
+				return true;
+			}
 
 			var token = GetToken();
 			if (token != "")
