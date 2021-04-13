@@ -1,6 +1,7 @@
 ﻿using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,18 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#region Properties
 
 		/// <summary>
+		/// Gets the ILogger
+		/// </summary>
+		protected virtual ILogger<ScriptTagHelper> Logger { get; }
+
+		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
 		/// </summary>
 		protected IReCaptchaV3Settings Settings { get; }
 
+		/// <summary>
+		/// Gets the UrlHelper attached to the current pipeline
+		/// </summary>
 		protected IUrlHelper UrlHelper { get; }
 
 		/// <summary>
@@ -54,8 +63,17 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Constructor
 
-		public ScriptTagHelper(IReCaptchaV3Settings settings, IUrlHelper urlHelper)
+		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaV3Settings settings, IUrlHelper urlHelper)
 		{
+			if (logger == null)
+			{
+				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ScriptTagHelper>();
+			}
+			else
+			{
+				Logger = logger;
+			}
+
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
@@ -78,11 +96,13 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		{
 			if (context == null)
 			{
+				Logger.LogTrace("TagHelperContext obj null for reCAPTCHA script tag");
 				throw new ArgumentNullException(nameof(context));
 			}
 
 			if (output == null)
 			{
+				Logger.LogTrace("TagHelperOutput obj null for reCAPTCHA script tag");
 				throw new ArgumentNullException(nameof(output));
 			}
 
@@ -91,15 +111,19 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			{
 				// Kill the output of this tag
 				output.SuppressOutput();
+				Logger.LogTrace("Suppress output for reCAPTCHA script tag");
 
 				// Leave
 				return;
 			}
 
+			Logger.LogTrace("Prepare output for reCAPTCHA script tag");
+
 			// Apply settings to props
 			if (FromSettings &&
 				Settings != null)
 			{
+				Logger.LogTrace("Get lib url from settings");
 				LibUrl = Settings.LibUrl;
 			}
 
@@ -115,6 +139,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 					var src = context.AllAttributes.Where(a => a.Name.ToLower().Equals("src")).LastOrDefault();
 					if (src != null)
 					{
+						Logger.LogTrace("Get lib url already present in tag src");
 						LibUrl = src.Value?.ToString();
 					}
 				}
@@ -122,6 +147,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				// If null set to current Google JS lib URI
 				if (LibUrl == null)
 				{
+					Logger.LogTrace("Get default lib url");
 					LibUrl = "https://www.google.com/recaptcha/api.js";
 				}
 			}
@@ -129,9 +155,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			// Resolve relative
 			if (LibUrl.StartsWith("~"))
 			{
+				Logger.LogTrace("Resolve lib url relative path");
 				LibUrl = UrlHelper.Content(LibUrl);
 			}
 
+			Logger.LogDebug("Set script tag to use {LibUrl}", LibUrl);
 			output.TagName = "script";
 			output.Attributes.SetAttribute("type", "text/javascript");
 			output.Attributes.SetAttribute("src", LibUrl);
