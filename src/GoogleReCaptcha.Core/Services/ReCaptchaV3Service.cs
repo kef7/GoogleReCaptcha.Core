@@ -2,6 +2,7 @@
 using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -25,6 +26,8 @@ namespace GoogleReCaptcha.Core.Services
 		#endregion
 
 		#region Properties
+
+		protected virtual ILogger<ReCaptchaV3Service> Logger { get; }
 
 		/// <summary>
 		/// Get ReCaptcha V3 settings
@@ -52,8 +55,17 @@ namespace GoogleReCaptcha.Core.Services
 		/// <param name="settings">ReCaptcah V3 settings</param>
 		/// <param name="actionContextAccessor">Current action context accessor</param>
 		/// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's ReCaptcha API</param>
-		public ReCaptchaV3Service(IReCaptchaV3Settings settings, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
+		public ReCaptchaV3Service(ILogger<ReCaptchaV3Service> logger, IReCaptchaV3Settings settings, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
 		{
+			if (logger == null)
+			{
+				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ReCaptchaV3Service>();
+			}
+			else
+			{
+				Logger = logger;
+			}
+
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
@@ -102,27 +114,41 @@ namespace GoogleReCaptcha.Core.Services
 			// Enabled?
 			if (!Settings.Enabled)
 			{
+				Logger.LogInformation("Skip attempt to verify reCAPTCHA because it is disabled via settings");
 				return true;
 			}
+
+			Logger.LogInformation("Attempt to verify reCAPTCHA");
 
 			var token = GetToken();
 			if (token != "")
 			{
+				// Get reqeust data
 				var req = BuildRequestData(token);
+				Logger.LogDebug("Verify reCAPTCHA request data: {req}", req);
+
+				// Get verify response
 				var awaiter = GetVerifyResponseAsync(req).GetAwaiter();
 				var res = awaiter.GetResult();
+				Logger.LogDebug("Verify reCAPTCHA response data: {res}", res);
+
+				// Process response
 				if (res != null)
 				{
 					if (res.Success == true)
 					{
+						Logger.LogInformation("Verify reCAPTCHA resolved to true");
 						return true;
 					}
 					if (res.ErrorCodes.Length > 0)
 					{
+						Logger.LogInformation("Verify reCAPTCHA contains response errors");
 						throw new ReCaptchaVerifyException(res);
 					}
 				}
 			}
+
+			Logger.LogInformation("Verify reCAPTCHA resolved to false");
 			return false;
 		}
 
@@ -135,26 +161,40 @@ namespace GoogleReCaptcha.Core.Services
 			// Enabled?
 			if (!Settings.Enabled)
 			{
+				Logger.LogInformation("Skip attempt to verify reCAPTCHA (async) because it is disabled via settings");
 				return true;
 			}
+
+			Logger.LogInformation("Attempt to verify reCAPTCHA (async)");
 
 			var token = GetToken();
 			if (token != "")
 			{
+				// Get reqeust data
 				var req = BuildRequestData(token);
+				Logger.LogDebug("Verify reCAPTCHA request data: {req}", req);
+
+				// Get verify response
 				var res = await GetVerifyResponseAsync(req);
+				Logger.LogDebug("Verify reCAPTCHA (async) response data: {res}", res);
+
+				// Process response
 				if (res != null)
 				{
 					if (res.Success == true)
 					{
+						Logger.LogInformation("Verify reCAPTCHA resolved to true");
 						return true;
 					}
 					if (res.ErrorCodes.Length > 0)
 					{
+						Logger.LogInformation("Verify reCAPTCHA contains response errors");
 						throw new ReCaptchaVerifyException(res);
 					}
 				}
 			}
+
+			Logger.LogInformation("Verify reCAPTCHA resolved to false");
 			return false;
 		}
 
@@ -234,6 +274,7 @@ namespace GoogleReCaptcha.Core.Services
 				}
 				catch (Exception ex)
 				{
+					Logger.LogError(ex, "Error in attempt to parse verify response from reCAPTCHA");
 					throw new ReCaptchaServiceException("Could not parse verify response object. See inner exception for details.", ex);
 				}
 			}
