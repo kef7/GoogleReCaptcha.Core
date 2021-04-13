@@ -89,7 +89,10 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			// Enabled?
 			if (!Settings.Enabled)
 			{
+				// Kill the output of this tag
 				output.SuppressOutput();
+
+				// Leave
 				return;
 			}
 
