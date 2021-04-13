@@ -58,10 +58,12 @@ namespace GoogleReCaptcha.Core.Services
 			{
 				throw new ArgumentNullException(nameof(settings));
 			}
+
 			if (actionContextAccessor == null)
 			{
 				throw new ArgumentNullException(nameof(actionContextAccessor));
 			}
+
 			if (httpClientFactory == null)
 			{
 				throw new ArgumentNullException(nameof(httpClientFactory));
