@@ -7,5 +7,6 @@
 		public string ApiUrl { get; set; }
 		public string SiteKey { get; set; }
 		public string SecretKey { get; set; }
+		public float DefaultPassingScore { get; set; } = Constants.DEFAULT_V3_PASSING_SCORE;
 	}
 }
