@@ -17,6 +17,12 @@
 
 <form id="captchaedForm" asp-antiforgery="true" method="post">
 
+	@if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+	{
+		<div class="alert alert-danger" role="alert">
+			@ViewBag.ErrorMsg
+		</div>
+	}
 	<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
 		<span>Please correct the following form issues:</span>
 	</div>
