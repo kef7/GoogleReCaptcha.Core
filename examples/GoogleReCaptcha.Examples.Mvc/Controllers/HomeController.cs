@@ -32,14 +32,14 @@ namespace GoogleReCaptcha.Examples.Mvc.Controllers
 			// Validate recaptcha
 			if (!await ReCaptchaService.VerifyAsync())
 			{
-				// TODO: Don't do stuff with model because it might be a robot's data
+				// Don't do stuff with model because it might be a robot's data
 
 				ViewBag.ErrorMsg = "Invalid form";
 
 				return View(model);
 			}
 
-			// TODO: Do stuff with model (apply business rules and or save it somewhere)
+			// Do stuff with model (apply business rules and or save it somewhere)
 
 			ViewBag.Data = model;
 
