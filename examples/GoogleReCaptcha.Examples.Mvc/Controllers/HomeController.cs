@@ -1,6 +1,7 @@
 ﻿using GoogleReCaptcha.Core.Services;
 using GoogleReCaptcha.Examples.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Examples.Mvc.Controllers
 {
@@ -21,7 +22,7 @@ namespace GoogleReCaptcha.Examples.Mvc.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Index(HomeModel model)
+		public async Task<IActionResult> Index(HomeModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -29,13 +30,13 @@ namespace GoogleReCaptcha.Examples.Mvc.Controllers
 			}
 
 			// Validate recaptcha
-			if (!ReCaptchaService.Verify())
+			if (!await ReCaptchaService.VerifyAsync())
 			{
-				// TODO: Don't do stuff with model because it might be a robot
+				// TODO: Don't do stuff with model because it might be a robot's data
 
-				ViewBag.Data = model;
+				ViewBag.ErrorMsg = "Invalid form";
 
-				return View("Success");
+				return View(model);
 			}
 
 			// TODO: Do stuff with model (apply business rules and or save it somewhere)
