@@ -7,5 +7,6 @@
 		string ApiUrl { get; }
 		string SiteKey { get; }
 		string SecretKey { get; }
+		float DefaultPassingScore { get; }
 	}
 }

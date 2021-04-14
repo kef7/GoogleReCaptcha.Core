@@ -13,6 +13,7 @@ namespace GoogleReCaptcha.Core
 {
 	public static class ServiceCollectionExtensions
 	{
+
 		private static void AddV3BaseServices(IServiceCollection services, IReCaptchaV3Settings settings)
 		{
 			// Add logging
@@ -41,6 +42,17 @@ namespace GoogleReCaptcha.Core
 
 			// Add V3 service
 			services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
+			{
+				// Get required services
+				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
+				var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
+				var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+
+				// Build v3 service
+				var v3Service = new ReCaptchaV3Service(logger, settings, actionContextAccessor, httpContextFactory);
+				return v3Service;
+			});
+			services.AddScoped<IReCaptchaV3Service, ReCaptchaV3Service>((serviceProvider) =>
 			{
 				// Get required services
 				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
