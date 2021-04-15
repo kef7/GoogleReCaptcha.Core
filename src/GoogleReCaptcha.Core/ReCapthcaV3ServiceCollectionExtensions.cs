@@ -11,13 +11,84 @@ using System.Net.Http;
 
 namespace GoogleReCaptcha.Core
 {
-	public static class ServiceCollectionExtensions
+	/// <summary>
+	/// Service collection extensions for ReCaptcah V3 usage
+	/// </summary>
+	public static class ReCapthcaV3ServiceCollectionExtensions
 	{
+		/// <summary>
+		/// Process and validate ReCaptchaV3Settings
+		/// </summary>
+		/// <param name="settings">Instance of settings that will be used for processing</param>
+		private static void ProcessValidateSettings(ReCaptchaV3Settings settings)
+		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException(nameof(settings));
+			}
 
-		private static void AddV3BaseServices(IServiceCollection services, IReCaptchaV3Settings settings)
+			// Lib url
+			if (!string.IsNullOrWhiteSpace(settings.LibUrl))
+			{
+				if (!Uri.IsWellFormedUriString(settings.LibUrl, UriKind.RelativeOrAbsolute))
+				{
+					throw new UriFormatException($"Invalid URI property {nameof(settings.LibUrl)}");
+				}
+			}
+			else
+			{
+				settings.LibUrl = Constants.DEFAULT_V3_LIBURL;
+			}
+
+			// Api url
+			if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+			{
+				if (!Uri.IsWellFormedUriString(settings.ApiUrl, UriKind.RelativeOrAbsolute))
+				{
+					throw new UriFormatException($"Invalid URI property {nameof(settings.ApiUrl)}");
+				}
+
+				// Fix missing trailing slash
+				if (!settings.ApiUrl.EndsWith("/"))
+				{
+					settings.ApiUrl = settings.ApiUrl + "/";
+				}
+			}
+			else
+			{
+				settings.ApiUrl = Constants.DEFAULT_V3_APIURL;
+			}
+
+			// Site key
+			if (string.IsNullOrWhiteSpace(settings.SiteKey))
+			{
+				throw new ArgumentException($"Invalid property {nameof(settings.SiteKey)}");
+			}
+
+			// Secret key
+			if (string.IsNullOrWhiteSpace(settings.SecretKey))
+			{
+				throw new ArgumentException($"Invalid property {nameof(settings.SecretKey)}");
+			}
+
+			// Default passing score
+			if (settings.DefaultPassingScore < 0)
+			{
+				settings.DefaultPassingScore = Constants.DEFAULT_V3_PASSING_SCORE;
+			}
+		}
+
+		private static void AddV3BaseServices(IServiceCollection services, ReCaptchaV3Settings settings)
 		{
 			// Add logging
 			services.AddLogging();
+
+			// Add settings for DI
+			ProcessValidateSettings(settings);
+			services.AddScoped<IReCaptchaV3Settings>((serviceProvider) =>
+			{
+				return settings;
+			});
 
 			// Add IActionContextAccessor for IUrlHelper DI
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -40,7 +111,7 @@ namespace GoogleReCaptcha.Core
 				httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
 			});
 
-			// Add V3 service
+			// Add V3 service using base interface; default service to use is V3
 			services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
 			{
 				// Get required services
@@ -52,6 +123,8 @@ namespace GoogleReCaptcha.Core
 				var v3Service = new ReCaptchaV3Service(logger, settings, actionContextAccessor, httpContextFactory);
 				return v3Service;
 			});
+
+			// Add V3 service
 			services.AddScoped<IReCaptchaV3Service, ReCaptchaV3Service>((serviceProvider) =>
 			{
 				// Get required services
@@ -77,12 +150,6 @@ namespace GoogleReCaptcha.Core
 			var configSection = config.GetSection(settingsKey);
 			var settings = configSection.Get<ReCaptchaV3Settings>();
 
-			// Add settings for DI
-			@this.AddScoped<IReCaptchaV3Settings, ReCaptchaV3Settings>((serviceProvider) =>
-			{
-				return settings;
-			});
-
 			// Add V3 services
 			AddV3BaseServices(@this, settings);
 		}
@@ -95,13 +162,7 @@ namespace GoogleReCaptcha.Core
 			}
 
 			// Get V3 settings from func
-			var settings = getSettingsAction();
-
-			// Add settings for Di
-			@this.AddScoped<IReCaptchaV3Settings>((serviceProvider) =>
-			{
-				return settings;
-			});
+			var settings = getSettingsAction() as ReCaptchaV3Settings;
 
 			// Add V3 services
 			AddV3BaseServices(@this, settings);
