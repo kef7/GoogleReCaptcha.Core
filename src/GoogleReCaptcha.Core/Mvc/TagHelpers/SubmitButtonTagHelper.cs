@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -30,6 +31,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Gets the ILogger
+		/// </summary>
+		protected virtual ILogger<SubmitButtonTagHelper> Logger { get; }
 
 		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
@@ -65,8 +71,22 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Constructor
 
-		public SubmitButtonTagHelper(IReCaptchaV3Settings settings)
+		public SubmitButtonTagHelper(ILogger<SubmitButtonTagHelper> logger, IReCaptchaV3Settings settings)
 		{
+			if (logger == null)
+			{
+				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<SubmitButtonTagHelper>();
+			}
+			else
+			{
+				Logger = logger;
+			}
+
+			if (settings == null)
+			{
+				throw new ArgumentNullException(nameof(settings));
+			}
+
 			Settings = settings;
 		}
 
@@ -78,38 +98,65 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		{
 			if (context == null)
 			{
+				Logger.LogTrace("TagHelperContext obj null for reCAPTCHA script tag");
 				throw new ArgumentNullException(nameof(context));
 			}
 
 			if (output == null)
 			{
+				Logger.LogTrace("TagHelperOutput obj null for reCAPTCHA script tag");
 				throw new ArgumentNullException(nameof(output));
 			}
 
-			// Apply settings to props
-			if (Settings != null)
+			// Enabled?
+			if (!Settings.Enabled)
 			{
-				SiteKey = Settings.SiteKey ?? "?";
+				// Setup tag as non-recaptcha supported button
+				output.TagName = "button";
+				Logger.LogTrace("Suppress reCAPTCHA version of button tag");
+
+				// Leave
+				return;
 			}
 
-			// Apply default to props
+			Logger.LogTrace("Prepare output for reCAPTCHA button tag");
+
+			// Apply settings to props
+			if (!string.IsNullOrWhiteSpace(Settings.SiteKey))
+			{
+				Logger.LogTrace("Get SiteKey from settings");
+				SiteKey = Settings.SiteKey;
+			}
+			else
+			{
+				Logger.LogTrace("Set default SiteKey");
+				SiteKey = "?";
+			}
+
+			// Apply default action
 			if (string.IsNullOrWhiteSpace(Action))
 			{
+				Logger.LogTrace("Set default Action");
 				Action = "submit";
 			}
+
+			// Apply default callback
 			if (string.IsNullOrWhiteSpace(CallBack))
 			{
+				Logger.LogTrace("Set default Callback");
 				CallBack = "onGReCaptchaV3Submit";
 			}
 
 			// Setup tag and base google attributes
+			Logger.LogDebug("Set button tag to use {Action}, {Callback}, and {SiteKey}", Action, CallBack, SiteKey);
 			output.TagName = "button";
 			output.Attributes.SetAttribute("data-action", Action);
 			output.Attributes.SetAttribute("data-callback", CallBack);
 			output.Attributes.SetAttribute("data-sitekey", SiteKey);
 
-			// Apply class attribute defaults
-			var classes = GetClasses(context);
+			// Merge class attributes with defaults and apply
+			Logger.LogTrace("Merge and set class attributes");
+			var classes = GetMergedClassAttributes(context);
 			output.Attributes.SetAttribute("class", classes);
 		}
 
@@ -117,7 +164,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Methods
 
-		protected string GetClasses(TagHelperContext context)
+		/// <summary>
+		/// Get and merge class attributes presnt with default class attributes required for Google ReCaptcha
+		/// </summary>
+		/// <param name="context">Tag helper context of the tag being processed</param>
+		/// <returns>String of all classes from current tag context and default</returns>
+		protected string GetMergedClassAttributes(TagHelperContext context)
 		{
 			var classes = DEFAULT_CLASS_ATTRS;
 			var classTagHelperAttr = context.AllAttributes["class"];
