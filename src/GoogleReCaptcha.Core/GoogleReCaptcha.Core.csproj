@@ -9,7 +9,7 @@
 	<IsPackable>true</IsPackable>
 	<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
 	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;ASP.NET MVC;</PackageTags>
+    <PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;netcore;.NET Core;net5;.NET 5;ASP.NET MVC</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
