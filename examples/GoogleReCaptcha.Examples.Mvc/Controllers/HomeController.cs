@@ -9,9 +9,9 @@ namespace GoogleReCaptcha.Examples.Mvc.Controllers
 	{
 		public IReCaptchaService ReCaptchaService { get; }
 
-		public HomeController(IReCaptchaService reCapthcaService)
+		public HomeController(IReCaptchaService reCaptchaService)
 		{
-			ReCaptchaService = reCapthcaService;
+			ReCaptchaService = reCaptchaService;
 		}
 
 		[HttpGet]
