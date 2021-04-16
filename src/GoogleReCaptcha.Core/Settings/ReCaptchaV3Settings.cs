@@ -2,7 +2,7 @@
 {
 	public class ReCaptchaV3Settings : IReCaptchaV3Settings
 	{
-		public bool Enabled { get; set; }
+		public bool Enabled { get; set; } = true;
 		public string LibUrl { get; set; }
 		public string ApiUrl { get; set; }
 		public string SiteKey { get; set; }
