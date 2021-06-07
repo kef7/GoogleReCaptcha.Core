@@ -47,13 +47,3 @@ steps:
     publishVstsFeed: '$(projectName)/$(feedName)'
     versioningScheme: off
     allowPackageConflicts: true
-
-# Push master branch to GitHub
-- powershell: |
-    Add-Content "$HOME\.git-credentials" "https://$(gitHubKey):x-oauth-basic@github.com"
-    git config --global user.name "$(gitHubUser)"
-    git config --global user.email "$(gitHubEmail)"
-    git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-    git remote add upstream https://github.com/kef7/GoogleReCaptcha.Core.git
-    git push upstream master:main
-  displayName: 'powershell git push to github'
