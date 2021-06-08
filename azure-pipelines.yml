@@ -42,7 +42,6 @@ steps:
   displayName: 'publish to artifacts staging'
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)
-    artifact: NuGetPackage
 
 # Push package to internal feed
 - task: NuGetCommand@2
