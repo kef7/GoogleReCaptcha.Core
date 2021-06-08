@@ -1,12 +1,7 @@
 ﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public interface IReCaptchaV3Settings
+	public interface IReCaptchaV3Settings : IReCaptchaSettings
 	{
-		bool Enabled { get; }
-		string LibUrl { get; }
-		string ApiUrl { get; }
-		string SiteKey { get; }
-		string SecretKey { get; }
 		float DefaultPassingScore { get; }
 	}
 }
