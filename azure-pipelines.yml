@@ -13,6 +13,12 @@ variables:
 # Init steps
 steps:
 
+# Restore dependancies
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'  
+  inputs:
+    command: restore
+
 # Build lib
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
