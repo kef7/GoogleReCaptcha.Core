@@ -30,6 +30,7 @@ namespace GoogleReCaptcha.Examples.Mvc
 			services.AddControllersWithViews();
 
 			services.AddGoogleReCaptchaV3(Configuration);
+			services.AddGoogleReCaptchaV2(Configuration);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
