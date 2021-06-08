@@ -1,11 +1,8 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Build pipeline trigger
 trigger:
 - master
 
+# Pool resources for build
 pool:
   vmImage: windows-latest
 
@@ -15,6 +12,12 @@ variables:
 
 # Init steps
 steps:
+
+# Restore dependancies
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'  
+  inputs:
+    command: restore
 
 # Build lib
 - task: DotNetCoreCLI@2
@@ -29,16 +32,21 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: pack
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     packagesToPack: 'src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj'
     nobuild: true
     versioningScheme: off
 
-# Push package
-- task: NuGetAuthenticate@0
-  displayName: 'nuget authenticate'
+# Publish to artifacts staging directory
+- task: PublishPipelineArtifact@1
+  displayName: 'publish to artifacts staging'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifact: NuGetPackage
+
+# Push package to internal feed
 - task: NuGetCommand@2
-  displayName: 'nuget push'
+  displayName: 'nuget push internal feed'
   inputs:
     command: push
     feedsToUse: select
@@ -47,13 +55,3 @@ steps:
     publishVstsFeed: '$(projectName)/$(feedName)'
     versioningScheme: off
     allowPackageConflicts: true
-
-# Push master branch to GitHub
-- powershell: |
-    Add-Content "$HOME\.git-credentials" "https://$(gitHubKey):x-oauth-basic@github.com"
-    git config --global user.name "$(gitHubUser)"
-    git config --global user.email "$(gitHubEmail)"
-    git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-    git remote add upstream https://github.com/kef7/GoogleReCaptcha.Core.git
-    git push upstream master:main
-  displayName: 'powershell git push to github'
