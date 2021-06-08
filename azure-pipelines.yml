@@ -34,11 +34,16 @@ steps:
     nobuild: true
     versioningScheme: off
 
-# Push package
-- task: NuGetAuthenticate@0
-  displayName: 'nuget authenticate'
+# Publish to artifacts staging directory
+- task: PublishPipelineArtifact@1
+  displayName: 'publish to artifacts staging'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)
+    artifact: NuGetPackage
+
+# Push package to internal feed
 - task: NuGetCommand@2
-  displayName: 'nuget push'
+  displayName: 'nuget push internal feed'
   inputs:
     command: push
     feedsToUse: select
