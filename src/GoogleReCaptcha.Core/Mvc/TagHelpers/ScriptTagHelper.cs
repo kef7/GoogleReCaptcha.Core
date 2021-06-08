@@ -40,7 +40,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
 		/// </summary>
-		protected IReCaptchaV3Settings Settings { get; }
+		protected IReCaptchaSettings Settings { get; }
 
 		/// <summary>
 		/// Gets the UrlHelper attached to the current pipeline
@@ -63,7 +63,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Constructor
 
-		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaV3Settings settings, IUrlHelper urlHelper)
+		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaSettings settings, IUrlHelper urlHelper)
 		{
 			if (logger == null)
 			{
@@ -144,11 +144,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 					}
 				}
 
-				// If null set to current Google JS lib URI
+				// If null set to default known Google JS lib URL
 				if (LibUrl == null)
 				{
 					Logger.LogTrace("Get default lib url");
-					LibUrl = "https://www.google.com/recaptcha/api.js";
+					LibUrl = Constants.DEFAULT_V3_LIBURL;
 				}
 			}
 
@@ -159,10 +159,19 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				LibUrl = UrlHelper.Content(LibUrl);
 			}
 
+			// Add script tag and set attributes
 			Logger.LogDebug("Set script tag to use {LibUrl}", LibUrl);
 			output.TagName = "script";
 			output.Attributes.SetAttribute("type", "text/javascript");
 			output.Attributes.SetAttribute("src", LibUrl);
+
+			// Add async attributes
+			var asyncTagAttr = new TagHelperAttribute("async", "", HtmlAttributeValueStyle.Minimized);
+			output.Attributes.SetAttribute(asyncTagAttr);
+
+			// Add defer attributes
+			var deferTagAttr = new TagHelperAttribute("defer", "", HtmlAttributeValueStyle.Minimized);
+			output.Attributes.SetAttribute(deferTagAttr);
 		}
 
 		#endregion

@@ -40,7 +40,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
 		/// </summary>
-		protected IReCaptchaV3Settings Settings { get; }
+		protected IReCaptchaSettings Settings { get; }
 
 		/// <summary>
 		/// Gets the <see cref="ViewContext"/> of the current rendering view
@@ -71,7 +71,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		#region Constructor
 
-		public SubmitButtonTagHelper(ILogger<SubmitButtonTagHelper> logger, IReCaptchaV3Settings settings)
+		public SubmitButtonTagHelper(ILogger<SubmitButtonTagHelper> logger, IReCaptchaSettings settings)
 		{
 			if (logger == null)
 			{
