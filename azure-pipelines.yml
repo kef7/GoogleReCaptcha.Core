@@ -1,11 +1,8 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Build pipeline trigger
 trigger:
 - master
 
+# Pool resources for build
 pool:
   vmImage: windows-latest
 
@@ -29,7 +26,7 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: pack
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     packagesToPack: 'src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj'
     nobuild: true
     versioningScheme: off
