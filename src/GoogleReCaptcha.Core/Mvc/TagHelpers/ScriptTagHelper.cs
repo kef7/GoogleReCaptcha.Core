@@ -15,7 +15,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 	/// </summary>
 	[HtmlTargetElement(TAG)]
 	[HtmlTargetElement("script", Attributes = ATTR_FROMSETTINGS)]
-	public class ScriptTagHelper : TagHelper
+	public class ScriptTagHelper : TagHelperBase
 	{
 		#region Static &| Consts
 
@@ -23,6 +23,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 		public const string ATTR_FROMSETTINGS = TagHelperConstants.ATTRIBUTE_PREFIX + "-from-settings";
 		public const string ATTR_LIBURL = TagHelperConstants.ATTRIBUTE_PREFIX + "-liburl";
+		public const string ATTR_USE_EXPLICIT_DEFAULT = TagHelperConstants.ATTRIBUTE_PREFIX + "-explicit";
+		public const string ATTR_SET_EXPLICIT_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-explicit-cb";
 
 		#endregion
 
@@ -33,14 +35,9 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#region Properties
 
 		/// <summary>
-		/// Gets the ILogger
-		/// </summary>
-		protected virtual ILogger<ScriptTagHelper> Logger { get; }
-
-		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
 		/// </summary>
-		protected IReCaptchaV3Settings Settings { get; }
+		protected IReCaptchaSettings Settings { get; }
 
 		/// <summary>
 		/// Gets the UrlHelper attached to the current pipeline
@@ -59,21 +56,25 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		[HtmlAttributeName(ATTR_LIBURL)]
 		public string LibUrl { get; set; }
 
+		/// <summary>
+		/// Get or set flag informing scrpit to use explicit flag with default call-back javascript function name
+		/// </summary>
+		[HtmlAttributeName(ATTR_USE_EXPLICIT_DEFAULT)]
+		public bool UseExplicitDefault { get; set; } = false;
+
+		/// <summary>
+		/// Get or set explicit call-back javascript function name; will also set explicit flag in url
+		/// </summary>
+		[HtmlAttributeName(ATTR_SET_EXPLICIT_CALLBACK)]
+		public string ExplicitCallBack { get; set; }
+
 		#endregion
 
 		#region Constructor
 
-		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaV3Settings settings, IUrlHelper urlHelper)
+		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaSettings settings, IUrlHelper urlHelper)
+			: base(logger)
 		{
-			if (logger == null)
-			{
-				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ScriptTagHelper>();
-			}
-			else
-			{
-				Logger = logger;
-			}
-
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
@@ -144,11 +145,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 					}
 				}
 
-				// If null set to current Google JS lib URI
+				// If null set to default known Google JS lib URL
 				if (LibUrl == null)
 				{
 					Logger.LogTrace("Get default lib url");
-					LibUrl = "https://www.google.com/recaptcha/api.js";
+					LibUrl = Constants.DEFAULT_V3_LIBURL;
 				}
 			}
 
@@ -159,15 +160,102 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				LibUrl = UrlHelper.Content(LibUrl);
 			}
 
+			// Set explicit call-back script function in URL
+			if (!string.IsNullOrWhiteSpace(ExplicitCallBack))
+			{
+				LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, ExplicitCallBack);
+			}
+			else if (UseExplicitDefault)
+			{
+				LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, "onloadCallback");
+			}
+
+			// Add script tag and set attributes
 			Logger.LogDebug("Set script tag to use {LibUrl}", LibUrl);
 			output.TagName = "script";
 			output.Attributes.SetAttribute("type", "text/javascript");
 			output.Attributes.SetAttribute("src", LibUrl);
+
+			// Add async attributes
+			var asyncTagAttr = new TagHelperAttribute("async", "", HtmlAttributeValueStyle.Minimized);
+			output.Attributes.SetAttribute(asyncTagAttr);
+
+			// Add defer attributes
+			var deferTagAttr = new TagHelperAttribute("defer", "", HtmlAttributeValueStyle.Minimized);
+			output.Attributes.SetAttribute(deferTagAttr);
 		}
 
 		#endregion
 
 		#region Methods
+
+		private string RebuildUrlUsingExplicitCallBackQuery(string url, string callBackFnName)
+		{
+			if (string.IsNullOrWhiteSpace(url))
+			{
+				throw new ArgumentException($"'{nameof(url)}' cannot be null or whitespace.", nameof(url));
+			}
+
+			if (string.IsNullOrWhiteSpace(callBackFnName))
+			{
+				throw new ArgumentException($"'{nameof(callBackFnName)}' cannot be null or whitespace.", nameof(callBackFnName));
+			}
+
+			// Rebuild url using explicit call-back in query string if needed
+			if (url.Contains("?"))
+			{// Split URL in two where query string is second part
+				var theSplits = url.Split("?", 2);
+				if (theSplits.Length == 2)
+				{
+					// Split query string into items
+					var queryItems = theSplits[1].Split("&");
+					if (queryItems.Length > 0)
+					{
+						// Define needed query mappings
+						var neededQueryMappings = new Dictionary<string, string>()
+							{
+								{ "onload", callBackFnName },
+								{ "render", "explicit" }
+							};
+
+						// Iterate over items and update what is needed
+						for (var i = 0; i < queryItems.Length; i++)
+						{
+							// Split item into key and value elements
+							var qi = queryItems[i].Split("=", 2);
+							if (qi.Length == 2)
+							{
+								// Match query item in mapping
+								var qiKey = qi[0];
+								foreach (var kvpMappings in neededQueryMappings)
+								{
+									if (kvpMappings.Key.Equals(qi[0], StringComparison.OrdinalIgnoreCase))
+									{
+										// Match found, rebuild query item and set to current item
+										queryItems[i] = string.Format("{0}={1}", kvpMappings.Key, kvpMappings.Value);
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					// Rebuild URL
+					var newQueryString = string.Join("&", queryItems);
+					if (newQueryString != "")
+					{
+						newQueryString = "?" + newQueryString;
+					}
+					url = theSplits[0] + newQueryString;
+				}
+			}
+			else
+			{
+				url = string.Format("{0}?onload={1}&render=explicit", url, callBackFnName);
+			}
+
+			return url;
+		}
 
 		#endregion
 	}

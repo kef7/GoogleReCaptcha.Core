@@ -2,18 +2,17 @@
 @addTagHelper GoogleReCaptcha.Core.Mvc.TagHelpers.SubmitButtonTagHelper, GoogleReCaptcha.Core
 
 @{
-	ViewData["Title"] = "ReCapthca v3 Example";
+	ViewData["Title"] = "ReCapthca v2 Example";
 }
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 
-	@* Google ReCaptcha v3 Script *@
+	@* Google ReCaptcha v2 Script *@
 	<g-recaptcha-script></g-recaptcha-script>
-	<script src="~/js/home.js"></script>
 }
 
-<h1>ReCapthca v3 Example</h1>
+<h1>ReCapthca v2 Example</h1>
 
 <form id="captchaedForm" asp-antiforgery="true" method="post">
 
@@ -44,8 +43,9 @@
 	</div>
 
 	<div class="offset-sm-2 offset-xxl-1 pl-1">
-		@* Google ReCaptcha v3 Button *@
-		<g-recaptcha-submit-button class="btn btn-primary">Submit</g-recaptcha-submit-button>
+		@* Google ReCaptcha v2 Widget *@
+		<g-recaptcha-widget></g-recaptcha-widget>
+		<button class="btn btn-primary">Submit</button>
 	</div>
 
 </form>
