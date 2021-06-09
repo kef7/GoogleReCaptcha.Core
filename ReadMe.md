@@ -1,6 +1,6 @@
 # GoogleReCaptcha.Core
 
-A small library in .NET Standard form for using Google reCAPTCHA within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms.
+A small library in .NET Standard form for using Google reCAPTCHA within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms. Supports v2 and v3 versions; v3 is default version assumed to be used.
 
 Follow the steps below to utilize this library to add Google reCAPTCHA support to your projects.
 
@@ -201,6 +201,45 @@ public HomeController(IReCaptchaService reCaptchaService)
 
 ___
 
+## reCAPTCHA v2 Invisible
+
+To use Google's reCAPTCHA v2 invisible variant in this tool you simply setup your project as you would the v3 version except you will configure v2 with v2 settings:
+
+1. Add a call to `AddGoogleReCaptchaV2` in your Startup class' `ConfigureServices` method
+1. Configure v2 settings; similar to v3 but possibly under a `GoogleReCaptcha:V2` entry in your `appsettings.json` file.
+1. Configure your razor pages the same as the v3 version show above this section
+
+___
+
+## reCAPTCHA v2 Widget
+
+To use Google's reCAPTCHA v2 widget version you will need to do the following:
+
+1. Add a call to `AddGoogleReCaptchaV2` in your Startup class' `ConfigureServices` method
+1. Configure v2 settings; similar to v3 but possibly under a `GoogleReCaptcha:V2` entry in your `appsettings.json` file. Note v2 settings are different then v3; it supports `Theme` and `Size`, but not `DefaultPassingScore`.
+1. Use the script tag helper, `</g-recaptcha-script>`, as normal
+1. Use the widget tag helper, `</g-recaptcha-widget>`, on your razor page where you wish the checkbox widget to be shown
+1. Apply a submit script/button as normal to submit your form
+1. (Optional) To use the ReCaptcha HTML Helpers you will need to (helpers example in example project @ ~/Views/HomeV2/Explicit.cshtml):
+    1. Add a call to `UseGoogleReCaptchaHtmlHelperSupport` in your Startup class' `Configure` method
+    2. Add an a using for the `GoogleReCaptcha.Core.Mvc` namespace in a view that is on the path of your resulting razor page; possibly in `_ViewImports.cshtml` like: `@using GoogleReCaptcha.Core.Mvc`
+
+Do ***NOT*** use the button tag helper, `</g-recaptcha-submit-button>`, on your razor pages for v2 widget support.
+
+## Widget Tag Helper
+
+The widget tag helper, `</g-recaptcha-widget>`, supports all the data attributes defined by Google. See [Google's reCAPTCHA g-recaptcha tag attributes](https://developers.google.com/recaptcha/docs/display#render_param) documentation for help on their use.
+
+___
+
 ## License
 
 This library/package is license under the [`Don't Be A Dick` public license](https://github.com/kef7/GoogleReCaptcha.Core/blob/main/LICENSE.txt). So, you know, don't be a one.
+
+___
+
+## Links
+
+- [Published package on NuGet.org](https://www.nuget.org/packages/GoogleReCaptcha.Core/)
+- [Google reCAPTCHA documentation](https://developers.google.com/recaptcha/intro)
+- [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin/)
