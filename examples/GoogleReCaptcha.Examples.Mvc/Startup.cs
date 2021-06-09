@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Security.Cryptography;
 
 namespace GoogleReCaptcha.Examples.Mvc
 {
@@ -29,8 +31,8 @@ namespace GoogleReCaptcha.Examples.Mvc
 
 			services.AddControllersWithViews();
 
-			services.AddGoogleReCaptchaV3(Configuration);
 			services.AddGoogleReCaptchaV2(Configuration);
+			services.AddGoogleReCaptchaV3(Configuration);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

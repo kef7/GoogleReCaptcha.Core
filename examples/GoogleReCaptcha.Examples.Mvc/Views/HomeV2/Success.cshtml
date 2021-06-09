@@ -15,5 +15,12 @@
 </div>
 
 <div>
-	<a class="btn btn-secondary" href="@Url.Action("Index", "HomeV2")">Repeat</a>
+	@if (ViewBag.FromExplicitVariant == true)
+	{
+		<a class="btn btn-secondary" href="@Url.Action("Explicit", "HomeV2")">Repeat</a>
+	}
+	else
+	{
+		<a class="btn btn-secondary" href="@Url.Action("Index", "HomeV2")">Repeat</a>
+	}
 </div>

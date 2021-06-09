@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' google.com *.google.com gstatic.com *.gstatic.com; img-src 'self' data:; child-src google.com *.google.com gstatic.com *.gstatic.com;">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' google.com *.google.com gstatic.com *.gstatic.com; img-src 'self' data:; child-src google.com *.google.com gstatic.com *.gstatic.com; script-src 'self' 'unsafe-inline' google.com *.google.com gstatic.com *.gstatic.com;">
 	<title>@ViewData["Title"] - Google ReCapthca Example, MVC</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" />
@@ -24,6 +24,9 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" asp-area="" asp-controller="HomeV2" asp-action="Index">V2</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-area="" asp-controller="HomeV2" asp-action="Explicit">V2 Explicit</a>
 						</li>
 					</ul>
                 </div>
