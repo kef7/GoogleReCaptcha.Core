@@ -15,7 +15,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 	/// </summary>
 	[HtmlTargetElement(TAG)]
 	[HtmlTargetElement("script", Attributes = ATTR_FROMSETTINGS)]
-	public class ScriptTagHelper : TagHelper
+	public class ScriptTagHelper : TagHelperBase
 	{
 		#region Static &| Consts
 
@@ -31,11 +31,6 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#endregion
 
 		#region Properties
-
-		/// <summary>
-		/// Gets the ILogger
-		/// </summary>
-		protected virtual ILogger<ScriptTagHelper> Logger { get; }
 
 		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
@@ -64,16 +59,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#region Constructor
 
 		public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaSettings settings, IUrlHelper urlHelper)
+			: base(logger)
 		{
-			if (logger == null)
-			{
-				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ScriptTagHelper>();
-			}
-			else
-			{
-				Logger = logger;
-			}
-
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
