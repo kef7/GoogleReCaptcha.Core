@@ -16,6 +16,12 @@ namespace GoogleReCaptcha.Core
 	/// </summary>
 	public static class ServiceCollectionExtensions
 	{
+		#region Static Fields
+
+		private static bool s_sharedPrevCalled = false;
+
+		#endregion
+
 		#region Shared
 
 		/// <summary>
@@ -25,35 +31,41 @@ namespace GoogleReCaptcha.Core
 		/// <param name="settings">ReCaptcah root settings object</param>
 		private static void AddSharedServices(IServiceCollection services, IReCaptchaSettings settings)
 		{
-			// Add logging
-			services.AddLogging();
-
-			// Add IActionContextAccessor for IUrlHelper DI
-			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
-			// Add IUrlHelper for DI
-			services.AddScoped<IUrlHelper>((serviceProvider) =>
-			{
-				var actionContext = serviceProvider.GetRequiredService<IActionContextAccessor>().ActionContext;
-				var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
-				return factory.GetUrlHelper(actionContext);
-			});
-
-			// Add IHttpClientFactory for ID
-			services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT_NAME, (httpClient) =>
-			{
-				if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
-				{
-					httpClient.BaseAddress = new Uri(settings.ApiUrl);
-				}
-				httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
-			});
-
 			// Add root settings for DI
 			services.AddScoped<IReCaptchaSettings>((serviceProvider) =>
 			{
 				return settings;
 			});
+
+			if (!s_sharedPrevCalled)
+			{
+				// Add logging
+				services.AddLogging();
+
+				// Add IActionContextAccessor for IUrlHelper DI
+				services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+				// Add IUrlHelper for DI
+				services.AddScoped<IUrlHelper>((serviceProvider) =>
+				{
+					var actionContext = serviceProvider.GetRequiredService<IActionContextAccessor>().ActionContext;
+					var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
+					return factory.GetUrlHelper(actionContext);
+				});
+
+				// Add IHttpClientFactory for ID
+				services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT_NAME, (httpClient) =>
+				{
+					if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+					{
+						httpClient.BaseAddress = new Uri(settings.ApiUrl);
+					}
+					httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
+				});
+
+				// Flag to to call again
+				s_sharedPrevCalled = true;
+			}
 		}
 
 		#endregion
@@ -116,6 +128,11 @@ namespace GoogleReCaptcha.Core
 			}
 		}
 
+		/// <summary>
+		/// Adds base V2 services
+		/// </summary>
+		/// <param name="services">Service colleciont to use to add support too</param>
+		/// <param name="settings">ReCaptcha settings to use for service</param>
 		private static void AddV2BaseServices(IServiceCollection services, ReCaptchaV2Settings settings)
 		{
 			// Process settings
@@ -144,6 +161,15 @@ namespace GoogleReCaptcha.Core
 			});
 		}
 
+		/// <summary>
+		/// Add ReCaptcha V2 services support
+		/// </summary>
+		/// <param name="this">Service colleciont to use to add support too</param>
+		/// <param name="config">Current configuration</param>
+		/// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+		/// <remarks>
+		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+		/// </remarks>
 		public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
 		{
 			if (config == null)
@@ -160,6 +186,14 @@ namespace GoogleReCaptcha.Core
 			AddV2BaseServices(@this, settings);
 		}
 
+		/// <summary>
+		/// Add ReCaptcha V2 services support
+		/// </summary>
+		/// <param name="this">Service colleciont to use to add support too</param>
+		/// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+		/// <remarks>
+		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+		/// </remarks>
 		public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsAction)
 		{
 			if (getSettingsAction == null)
@@ -240,6 +274,11 @@ namespace GoogleReCaptcha.Core
 			}
 		}
 
+		/// <summary>
+		/// Adds base V3 services
+		/// </summary>
+		/// <param name="services">Service colleciont to use to add support too</param>
+		/// <param name="settings">ReCaptcha settings to use for service</param>
 		private static void AddV3BaseServices(IServiceCollection services, ReCaptchaV3Settings settings)
 		{
 			// Process settings
@@ -281,6 +320,15 @@ namespace GoogleReCaptcha.Core
 			});
 		}
 
+		/// <summary>
+		/// Add ReCaptcha V3 services support
+		/// </summary>
+		/// <param name="this">Service colleciont to use to add support too</param>
+		/// <param name="config">Current configuration</param>
+		/// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+		/// <remarks>
+		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+		/// </remarks>
 		public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
 		{
 			if (config == null)
@@ -297,6 +345,14 @@ namespace GoogleReCaptcha.Core
 			AddV3BaseServices(@this, settings);
 		}
 
+		/// <summary>
+		/// Add ReCaptcha V3 services support
+		/// </summary>
+		/// <param name="this">Service colleciont to use to add support too</param>
+		/// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+		/// <remarks>
+		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+		/// </remarks>
 		public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsAction)
 		{
 			if (getSettingsAction == null)
