@@ -113,7 +113,7 @@ namespace GoogleReCaptcha.Core.Services
 				}
 			}
 
-			Logger.LogWarning("Verify reCAPTCHA attempted failed");
+			Logger.LogWarning("Attempt to verify reCAPTCHA failed");
 			return false;
 		}
 
