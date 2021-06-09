@@ -13,7 +13,9 @@
 		var onloadCallback = function () {
 			console.log('Google reCAPTCHA loaded');
 			grecaptcha.render('myRecaptchaWidget', {
-				'sitekey': '<ADD-YOUR-SITE-KEY-HERE>'
+				'sitekey': '@Html.ReCaptchaV2SiteKey()',
+				'theme': '@Html.ReCaptchaV2Theme()',
+				'size': '@Html.ReCaptchaV2Size()'
 			});
 		}
 	</script>
