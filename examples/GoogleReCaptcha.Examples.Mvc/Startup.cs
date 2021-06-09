@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Security.Cryptography;
 
 namespace GoogleReCaptcha.Examples.Mvc
 {
@@ -29,6 +31,7 @@ namespace GoogleReCaptcha.Examples.Mvc
 
 			services.AddControllersWithViews();
 
+			services.AddGoogleReCaptchaV2(Configuration);
 			services.AddGoogleReCaptchaV3(Configuration);
 		}
 
@@ -54,6 +57,8 @@ namespace GoogleReCaptcha.Examples.Mvc
 			app.UseCors();
 
 			app.UseAuthorization();
+
+			app.UseGoogleReCaptchaHtmlHelperSupport();
 
 			app.UseEndpoints(endpoints =>
 			{
