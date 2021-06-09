@@ -11,7 +11,7 @@ namespace GoogleReCaptcha.Core.Settings
 		public string ApiUrl { get; set; }
 		public string SiteKey { get; set; }
 		public string SecretKey { get; set; }
-		public V2Theme Theme { get; set; } = 0;
-		public V2Size Size { get; set; } = 0;
+		public V2Theme? Theme { get; set; }
+		public V2Size? Size { get; set; }
 	}
 }

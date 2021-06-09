@@ -23,6 +23,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		public const string TAG = TagHelperConstants.TAG_PREFIX + "-widget";
 
 		public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
+		public const string ATTR_THEME = TagHelperConstants.ATTRIBUTE_PREFIX + "-theme";
+		public const string ATTR_SIZE = TagHelperConstants.ATTRIBUTE_PREFIX + "-size";
 
 		public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
 
@@ -51,6 +53,18 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		/// </summary>
 		[HtmlAttributeName(ATTR_SITEKEY)]
 		public string SiteKey { get; set; }
+
+		/// <summary>
+		/// V2 theme attribute
+		/// </summary>
+		[HtmlAttributeName(ATTR_THEME)]
+		public V2Theme? Theme { get; set; }
+
+		/// <summary>
+		/// V2 theme attribute
+		/// </summary>
+		[HtmlAttributeName(ATTR_THEME)]
+		public V2Size? Size { get; set; }
 
 		#endregion
 
@@ -98,7 +112,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 			Logger.LogTrace("Prepare output for reCAPTCHA widget div tag");
 
-			// Apply settings to props
+			// Apply sitekey setting to props
 			if (!string.IsNullOrWhiteSpace(Settings.SiteKey))
 			{
 				Logger.LogTrace("Get SiteKey from settings");
@@ -110,10 +124,38 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				SiteKey = "?";
 			}
 
+			// Apply theme setting to prop
+			if (Settings.Theme.HasValue)
+			{
+				Logger.LogTrace("Get Theme from settings");
+				Theme = Settings.Theme.Value;
+			}
+
+			// Apply theme setting to prop
+			if (Settings.Size.HasValue)
+			{
+				Logger.LogTrace("Get Size from settings");
+				Size = Settings.Size.Value;
+			}
+
 			// Setup tag and base google attributes
 			Logger.LogDebug("Set widget div tag to use {SiteKey}", SiteKey);
 			output.TagName = "div";
 			output.Attributes.SetAttribute("data-sitekey", SiteKey);
+
+			// Setup theme attribute
+			if (Theme.HasValue)
+			{
+				Logger.LogDebug("Apply widget theme attribute as {Theme}", Theme.Value);
+				output.Attributes.SetAttribute("data-theme", Theme.Value.ToString().ToLower());
+			}
+
+			// Setup size attribute
+			if (Size.HasValue)
+			{
+				Logger.LogDebug("Apply widget size attribute as {Size}", Size.Value);
+				output.Attributes.SetAttribute("data-size", Size.Value.ToString().ToLower());
+			}
 
 			// Merge class attributes with defaults and apply
 			Logger.LogTrace("Merge and set class attributes");
