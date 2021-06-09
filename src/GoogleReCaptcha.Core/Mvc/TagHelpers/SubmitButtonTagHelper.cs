@@ -11,6 +11,9 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 	/// <summary>
 	/// Tag helper to assist in adding Google ReCaptcah v2/v3 data attributes from settings configured in appsettings.json into a submit button
 	/// </summary>
+	/// <remarks>
+	/// Use this with invisible captcha for v2 or v3.
+	/// </remarks>
 	[HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
 	public class SubmitButtonTagHelper : TagHelperBase
 	{
