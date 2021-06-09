@@ -58,6 +58,9 @@ namespace GoogleReCaptcha.Examples.Mvc
 
 			app.UseAuthorization();
 
+			app.UseGoogleReCaptchaHtmlHelperSupport();
+			app.UseGoogleReCaptchaSettingsHttpContextInjection();
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllerRoute(
