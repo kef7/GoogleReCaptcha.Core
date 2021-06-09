@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
 	/// <summary>
-	/// Tag helper to assist in adding Google ReCaptcah v3 data attributes from settings configured in appsettings.json
+	/// Tag helper to assist in adding Google ReCaptcah v2/v3 data attributes from settings configured in appsettings.json into a submit button
 	/// </summary>
 	[HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
-	public class SubmitButtonTagHelper : TagHelper
+	public class SubmitButtonTagHelper : TagHelperBase
 	{
 		#region Static &| Consts
 
@@ -31,11 +31,6 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#endregion
 
 		#region Properties
-
-		/// <summary>
-		/// Gets the ILogger
-		/// </summary>
-		protected virtual ILogger<SubmitButtonTagHelper> Logger { get; }
 
 		/// <summary>
 		/// Gets the recaptcha settings to use for this tag's output
@@ -72,16 +67,8 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		#region Constructor
 
 		public SubmitButtonTagHelper(ILogger<SubmitButtonTagHelper> logger, IReCaptchaSettings settings)
+			: base(logger)
 		{
-			if (logger == null)
-			{
-				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<SubmitButtonTagHelper>();
-			}
-			else
-			{
-				Logger = logger;
-			}
-
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
@@ -156,33 +143,13 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 
 			// Merge class attributes with defaults and apply
 			Logger.LogTrace("Merge and set class attributes");
-			var classes = GetMergedClassAttributes(context);
+			var classes = GetMergedClassAttributes(context, DEFAULT_CLASS_ATTRS);
 			output.Attributes.SetAttribute("class", classes);
 		}
 
 		#endregion
 
 		#region Methods
-
-		/// <summary>
-		/// Get and merge class attributes presnt with default class attributes required for Google ReCaptcha
-		/// </summary>
-		/// <param name="context">Tag helper context of the tag being processed</param>
-		/// <returns>String of all classes from current tag context and default</returns>
-		protected string GetMergedClassAttributes(TagHelperContext context)
-		{
-			var classes = DEFAULT_CLASS_ATTRS;
-			var classTagHelperAttr = context.AllAttributes["class"];
-			if (classTagHelperAttr != null)
-			{
-				var tmp = classTagHelperAttr.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(tmp))
-				{
-					classes = classes + " " + tmp;
-				}
-			}
-			return classes;
-		}
 
 		#endregion
 	}
