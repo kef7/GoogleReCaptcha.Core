@@ -25,6 +25,10 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 		public const string ATTR_THEME = TagHelperConstants.ATTRIBUTE_PREFIX + "-theme";
 		public const string ATTR_SIZE = TagHelperConstants.ATTRIBUTE_PREFIX + "-size";
+		public const string ATTR_TAB_INDEX = TagHelperConstants.ATTRIBUTE_PREFIX + "-tabindex";
+		public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-cb";
+		public const string ATTR_EXP_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-exp-cb";
+		public const string ATTR_ERR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-err-cb";
 
 		public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
 
@@ -49,22 +53,46 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		public ViewContext ViewContext { get; set; }
 
 		/// <summary>
-		/// Site key attribute
+		/// Site key attribute; will attempt to use from configured settings if not defined
 		/// </summary>
 		[HtmlAttributeName(ATTR_SITEKEY)]
 		public string SiteKey { get; set; }
 
 		/// <summary>
-		/// V2 theme attribute
+		/// V2 theme attribute; will attempt to use from configured settings if not defined
 		/// </summary>
 		[HtmlAttributeName(ATTR_THEME)]
 		public V2Theme? Theme { get; set; }
 
 		/// <summary>
-		/// V2 theme attribute
+		/// V2 theme attribute; will attempt to use from configured settings if not defined
 		/// </summary>
 		[HtmlAttributeName(ATTR_THEME)]
 		public V2Size? Size { get; set; }
+
+		/// <summary>
+		/// Tab index attribute
+		/// </summary>
+		[HtmlAttributeName(ATTR_TAB_INDEX)]
+		public int? TabIndex { get; set; }
+
+		/// <summary>
+		/// Call-back function; executed when the use submits a successful response (token passed into it)
+		/// </summary>
+		[HtmlAttributeName(ATTR_CALLBACK)]
+		public string CallBack { get; set; }
+
+		/// <summary>
+		/// Expired call-back function; executed when reCAPTCHA response expires and the user needs to re-verify
+		/// </summary>
+		[HtmlAttributeName(ATTR_EXP_CALLBACK)]
+		public string ExpiredCallBack { get; set; }
+
+		/// <summary>
+		/// Error call-back function; executed when script encounters an error
+		/// </summary>
+		[HtmlAttributeName(ATTR_ERR_CALLBACK)]
+		public string ErrorCallBack { get; set; }
 
 		#endregion
 
@@ -125,14 +153,16 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			}
 
 			// Apply theme setting to prop
-			if (Settings.Theme.HasValue)
+			if (!Theme.HasValue &&
+				Settings.Theme.HasValue)
 			{
 				Logger.LogTrace("Get Theme from settings");
 				Theme = Settings.Theme.Value;
 			}
 
 			// Apply theme setting to prop
-			if (Settings.Size.HasValue)
+			if (!Size.HasValue &&
+				Settings.Size.HasValue)
 			{
 				Logger.LogTrace("Get Size from settings");
 				Size = Settings.Size.Value;
@@ -155,6 +185,34 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			{
 				Logger.LogDebug("Apply widget size attribute as {Size}", Size.Value);
 				output.Attributes.SetAttribute("data-size", Size.Value.ToString().ToLower());
+			}
+
+			// Setup tabindex attribute
+			if (TabIndex.HasValue)
+			{
+				Logger.LogDebug("Apply widget tabindex attribute as {TabIndex}", TabIndex.Value);
+				output.Attributes.SetAttribute("data-tabindex", TabIndex.Value.ToString());
+			}
+
+			// Setup call-back attribute
+			if (!string.IsNullOrWhiteSpace(CallBack))
+			{
+				Logger.LogDebug("Apply widget call-back attribute as {CallBack}", CallBack);
+				output.Attributes.SetAttribute("data-callback", CallBack);
+			}
+
+			// Setup expired call-back attribute
+			if (!string.IsNullOrWhiteSpace(ExpiredCallBack))
+			{
+				Logger.LogDebug("Apply widget expired call-back attribute as {ExpiredCallBack}", ExpiredCallBack);
+				output.Attributes.SetAttribute("data-expired-callback", ExpiredCallBack);
+			}
+
+			// Setup error call-back attribute
+			if (!string.IsNullOrWhiteSpace(ErrorCallBack))
+			{
+				Logger.LogDebug("Apply widget error call-back attribute as {ErrorCallBack}", ErrorCallBack);
+				output.Attributes.SetAttribute("data-error-callback", ErrorCallBack);
 			}
 
 			// Merge class attributes with defaults and apply
