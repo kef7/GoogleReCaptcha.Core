@@ -4,6 +4,8 @@ A small library in .NET Standard form for using Google reCAPTCHA within an ASP.N
 
 Follow the steps below to utilize this library to add Google reCAPTCHA support to your projects.
 
+___
+
 ## Install the NuGet Package
 
 You can install the package [from NuGet](https://www.nuget.org/packages/GoogleReCaptcha.Core/) to your project from within Visual studio or from command line:
@@ -17,6 +19,8 @@ Install-Package GoogleReCaptcha.Core
 ```powershell
 dotnet add package GoogleReCaptcha.Core
 ```
+
+___
 
 ## Add Service In Startup
 
@@ -61,6 +65,8 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+___
+
 ## Startup Settings Configuration
 
 You can apply your Google reCAPTCHA version 3 configuration settings in `appsettings.json` like so:
@@ -84,7 +90,15 @@ You can apply your Google reCAPTCHA version 3 configuration settings in `appsett
 
 The service collection extension method `AddGoogleReCaptchaV3(IConfiguration)` by default looks for your settings in the configuration section `GoogleReCaptcha:V3`.
 
-## Import Tag Helpers (MVC Only)
+___
+
+## Usage On Forms (MVC Only)
+
+When you have the GoogleReCaptcha.Core services configured and its tag helpers imported you can use them inside your views.
+
+You will need these items to utilize Google reCAPTCHA in your forms:
+
+### Import Tag Helpers
 
 This library comes with tag helpers to get your reCAPTCHA configuration settings and features into your view's forms.
 
@@ -94,12 +108,6 @@ You will need to add the tag helpers in your views path, probably in the `~/View
 @addTagHelper *, GoogleReCaptcha.Core
 ```
 
-## Usage On Forms (MVC Only)
-
-When you have the GoogleReCaptcha.Core services configured and its tag helpers imported you can use them inside your views.
-
-You will need these items to utilize Google reCAPTCHA in your forms:
-
 ### Add ReCaptcha Script
 
 Add the Google ReCaptcha script using the `</g-recaptcha-script>` tag. This will pull the Google reCAPTCHA javascript library into your view with your settings applied:
@@ -108,7 +116,7 @@ Add the Google ReCaptcha script using the `</g-recaptcha-script>` tag. This will
 <g-recaptcha-script></g-recaptcha-script>
 ```
 
-> You can use your own `</script>` tag if you would like, and still utilize your own settings:
+> You can use your own `</script>` tag if you would like, and still enforce your own settings:
 
 ```html
 <script g-recaptcha-from-settings="true" ... ></script>
@@ -164,7 +172,9 @@ function onGReCaptchaV3Submit(token) {
 <g-recaptcha-script></g-recaptcha-script>
 ```
 
-## Usage In MVC Action Methods - Verify ReCaptcha
+___
+
+## Usage In Action Methods - Verify ReCaptcha (MVC Only)
 
 Inside your MVC controllers we can call to Google's reCAPTCHA API to verify its evaluation of your POST action methods via the `token` that is placed into the form. In the [example here](https://github.com/kef7/GoogleReCaptcha.Core/blob/ff576c554316747fa8dc6c9535d6fb7341f971f3/examples/GoogleReCaptcha.Examples.Mvc/Controllers/HomeController.cs#L25) we have a HomeController which accepts a POST at action method Index(model). We call the verify service like so:
 
@@ -206,7 +216,7 @@ ___
 To use Google's reCAPTCHA v2 invisible variant in this tool you simply setup your project as you would the v3 version except you will configure v2 with v2 settings:
 
 1. Add a call to `AddGoogleReCaptchaV2` in your Startup class' `ConfigureServices` method
-1. Configure v2 settings; similar to v3 but possibly under a `GoogleReCaptcha:V2` entry in your `appsettings.json` file.
+1. Configure v2 settings; similar to v3 but possibly under a `GoogleReCaptcha:V2` entry in your `appsettings.json` file. Note v2 settings are different then v3; it supports `Theme` and `Size`, but not `DefaultPassingScore`.
 1. Configure your razor pages the same as the v3 version show above this section
 
 ___
@@ -226,7 +236,7 @@ To use Google's reCAPTCHA v2 widget version you will need to do the following:
 
 Do ***NOT*** use the button tag helper, `</g-recaptcha-submit-button>`, on your razor pages for v2 widget support.
 
-## Widget Tag Helper
+### Widget Tag Helper
 
 The widget tag helper, `</g-recaptcha-widget>`, supports all the data attributes defined by Google. See [Google's reCAPTCHA g-recaptcha tag attributes](https://developers.google.com/recaptcha/docs/display#render_param) documentation for help on their use.
 
@@ -234,7 +244,7 @@ ___
 
 ## License
 
-This library/package is license under the [`Don't Be A Dick` public license](https://github.com/kef7/GoogleReCaptcha.Core/blob/main/LICENSE.txt). So, you know, don't be a one.
+This library/package is license under the [`Don't Be A Dick` public license](https://github.com/kef7/GoogleReCaptcha.Core/blob/main/LICENSE.txt). So, you know, don't be one.
 
 ___
 
