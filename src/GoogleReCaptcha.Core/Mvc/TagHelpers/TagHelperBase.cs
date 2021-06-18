@@ -39,6 +39,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		/// <returns>String of all classes from current tag context and default</returns>
 		protected string GetMergedClassAttributes(TagHelperContext context, string defaultClassAttrs)
 		{
+			Logger.LogTrace("Merging default and current context class attributes.");
 			var classes = defaultClassAttrs ?? "";
 			var classTagHelperAttr = context.AllAttributes["class"];
 			if (classTagHelperAttr != null)

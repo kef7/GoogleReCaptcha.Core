@@ -15,6 +15,7 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 	/// </summary>
 	[HtmlTargetElement(TAG)]
 	[HtmlTargetElement("script", Attributes = ATTR_FROMSETTINGS)]
+	[HtmlTargetElement("script", Attributes = ATTR_LIBURL + "," + ATTR_USE_EXPLICIT_DEFAULT + "," + ATTR_SET_EXPLICIT_CALLBACK)]
 	public class ScriptTagHelper : TagHelperBase
 	{
 		#region Static &| Consts
@@ -121,10 +122,9 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			Logger.LogTrace("Prepare output for reCAPTCHA script tag");
 
 			// Apply settings to props
-			if (FromSettings &&
-				Settings != null)
+			if (FromSettings)
 			{
-				Logger.LogTrace("Get lib url from settings");
+				Logger.LogTrace("Set lib url from settings");
 				LibUrl = Settings.LibUrl;
 			}
 
@@ -135,14 +135,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 				LibUrl = null;
 
 				// Pull from src
-				if (!FromSettings)
+				Logger.LogTrace("Get lib url already present in tag src");
+				var src = context.AllAttributes.Where(a => a.Name.ToLower().Equals("src")).LastOrDefault();
+				if (src != null)
 				{
-					var src = context.AllAttributes.Where(a => a.Name.ToLower().Equals("src")).LastOrDefault();
-					if (src != null)
-					{
-						Logger.LogTrace("Get lib url already present in tag src");
-						LibUrl = src.Value?.ToString();
-					}
+					Logger.LogTrace("Set lib url from src");
+					LibUrl = src.Value?.ToString();
 				}
 
 				// If null set to default known Google JS lib URL
@@ -163,10 +161,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			// Set explicit call-back script function in URL
 			if (!string.IsNullOrWhiteSpace(ExplicitCallBack))
 			{
+				Logger.LogTrace("Set expicit callback using provided");
 				LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, ExplicitCallBack);
 			}
 			else if (UseExplicitDefault)
 			{
+				Logger.LogTrace("Set expicit callback using default");
 				LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, "onloadCallback");
 			}
 
