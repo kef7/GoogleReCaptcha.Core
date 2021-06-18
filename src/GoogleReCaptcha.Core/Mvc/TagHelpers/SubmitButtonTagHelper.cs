@@ -15,17 +15,20 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 	/// Use this with invisible captcha for v2 or v3.
 	/// </remarks>
 	[HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
+	[HtmlTargetElement("button", Attributes = ATTR_FROMSETTINGS, TagStructure = TagStructure.NormalOrSelfClosing)] // Just to get it to call
+	[HtmlTargetElement("button", Attributes = ATTR_ACTION + "," + ATTR_CALLBACK + "," + ATTR_SITEKEY, TagStructure = TagStructure.NormalOrSelfClosing)]
 	public class SubmitButtonTagHelper : TagHelperBase
 	{
 		#region Static &| Consts
 
 		public const string TAG = TagHelperConstants.TAG_PREFIX + "-submit-button";
 
+		public const string ATTR_FROMSETTINGS = TagHelperConstants.ATTRIBUTE_PREFIX + "-from-settings";
 		public const string ATTR_ACTION = TagHelperConstants.ATTRIBUTE_PREFIX + "-action";
 		public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-callback";
 		public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 
-		public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
+		public const string DEFAULT_CLASSES = "g-recaptcha";
 
 		#endregion
 
@@ -48,8 +51,17 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		public ViewContext ViewContext { get; set; }
 
 		/// <summary>
+		/// From settings attribute; flag and target key; will override src if ture
+		/// </summary>
+		[HtmlAttributeName(ATTR_FROMSETTINGS)]
+		public bool FromSettings { get; set; }
+
+		/// <summary>
 		/// Action type attribute; "submit"
 		/// </summary>
+		/// <remarks>
+		/// Custom named action for analysis. See Google's documentation on <see href="https://developers.google.com/recaptcha/docs/v3#actions">actions</see>.
+		/// </remarks>
 		[HtmlAttributeName(ATTR_ACTION)]
 		public string Action { get; set; }
 
@@ -64,6 +76,12 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 		/// </summary>
 		[HtmlAttributeName(ATTR_SITEKEY)]
 		public string SiteKey { get; set; }
+
+		/// <summary>
+		/// Button type attribute
+		/// </summary>
+		[HtmlAttributeName("type")]
+		public SubmitButtonType Type { get; set; } = SubmitButtonType.Button;
 
 		#endregion
 
@@ -112,15 +130,11 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			Logger.LogTrace("Prepare output for reCAPTCHA button tag");
 
 			// Apply settings to props
-			if (!string.IsNullOrWhiteSpace(Settings.SiteKey))
+			if (FromSettings ||
+				string.IsNullOrWhiteSpace(SiteKey))
 			{
-				Logger.LogTrace("Get SiteKey from settings");
+				Logger.LogTrace("Set SiteKey from settings");
 				SiteKey = Settings.SiteKey;
-			}
-			else
-			{
-				Logger.LogTrace("Set default SiteKey");
-				SiteKey = "?";
 			}
 
 			// Apply default action
@@ -145,9 +159,18 @@ namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 			output.Attributes.SetAttribute("data-sitekey", SiteKey);
 
 			// Merge class attributes with defaults and apply
-			Logger.LogTrace("Merge and set class attributes");
-			var classes = GetMergedClassAttributes(context, DEFAULT_CLASS_ATTRS);
+			var classes = GetMergedClassAttributes(context, DEFAULT_CLASSES);
 			output.Attributes.SetAttribute("class", classes);
+
+			// Set type if not defined
+			Logger.LogTrace("Set button type if not defined");
+			var btnTypeAttr = context.AllAttributes["type"];
+			if (btnTypeAttr == null)
+			{
+				var btnType = Type.ToString().ToLower();
+				Logger.LogDebug("Button type not defined, setting to {ButtonType}", btnType);
+				output.Attributes.SetAttribute("type", btnType);
+			}
 		}
 
 		#endregion
