@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
 	<PackageId>GoogleReCaptcha.Core</PackageId>
-	<Version>1.0.0-rc.1</Version>
+	<Version>1.0.0-rc.2</Version>
 	<Authors>kef7</Authors>
 	<Description>ASP.NET Core/5 MVC support for Google ReCaptcha (.NET Standard 2.1)</Description>
 	<IsPackable>true</IsPackable>
