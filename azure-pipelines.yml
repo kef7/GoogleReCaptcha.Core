@@ -4,7 +4,7 @@ trigger:
 
 # Pool resources for build
 pool:
-  vmImage: windows-latest
+  vmImage: ubuntu-latest
 
 # Variables for build and pack
 variables:
@@ -12,6 +12,12 @@ variables:
 
 # Init steps
 steps:
+
+# Setup dotnet version
+- task: UseDotNet@2
+  inputs:
+    version: $(dotNetVersion)
+    includePreviewVersions: false
 
 # Restore dependancies
 - task: DotNetCoreCLI@2
