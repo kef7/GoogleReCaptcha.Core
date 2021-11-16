@@ -5,11 +5,11 @@
 	<PackageId>GoogleReCaptcha.Core</PackageId>
 	<Version>1.0.0</Version>
 	<Authors>kef7</Authors>
-	<Description>ASP.NET Core/5 MVC support for Google ReCaptcha (.NET Standard 2.1)</Description>
+	<Description>Google ReCaptcha support for .NET Standard 2.1 and ASP.NET Core MVC</Description>
 	<IsPackable>true</IsPackable>
 	<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
 	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;netcore;.NET Core;net5;.NET 5;ASP.NET MVC</PackageTags>
+    <PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;.NET Standard 2.1;netstandard2.1;netcore;.NET Core;net6;.NET 6;ASP.NET Core;ASP.NET Core MVC</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
