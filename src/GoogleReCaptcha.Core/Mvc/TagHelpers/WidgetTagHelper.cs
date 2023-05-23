@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
-	/// <summary>
-	/// Tag helper to assist in adding Google ReCaptcah v2 data attributes from settings configured in appsettings.json into the v2 widget
-	/// </summary>
-	/// <remarks>
-	/// Used in v2 implementation where the widget is required; not used in invisible variant.
-	/// Use <see cref="SubmitdivTagHelper"/> for v2 invisible variant.
-	/// </remarks>
-	[HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
+    /// <summary>
+    /// Tag helper to assist in adding Google ReCaptcah v2 data attributes from settings configured in appsettings.json into the v2 widget
+    /// </summary>
+    /// <remarks>
+    /// Used in v2 implementation where the widget is required; not used in invisible variant.
+    /// Use <see cref="SubmitdivTagHelper"/> for v2 invisible variant.
+    /// </remarks>
+    [HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
 	public class WidgetTagHelper : TagHelperBase
 	{
 		#region Static &| Consts

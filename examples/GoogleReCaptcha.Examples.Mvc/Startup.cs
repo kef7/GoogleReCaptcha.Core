@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Security.Cryptography;
 
 namespace GoogleReCaptcha.Examples.Mvc
 {
-	public class Startup
+    public class Startup
 	{
 		public IConfiguration Configuration { get; }
 		public IWebHostEnvironment WebHostEnvironment { get; }

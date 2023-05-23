@@ -1,17 +1,13 @@
 ﻿using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core
 {
-	/// <summary>
-	/// Inject limited ReCaptcha settings data into <see cref="HttpContext.Items"/>
-	/// </summary>
-	public class ReCaptchaSettingsHttpContextItemsInjectionMiddleware
+    /// <summary>
+    /// Inject limited ReCaptcha settings data into <see cref="HttpContext.Items"/>
+    /// </summary>
+    public class ReCaptchaSettingsHttpContextItemsInjectionMiddleware
 	{
 		private readonly RequestDelegate _next;
 		private readonly ILoggerFactory _loggerFactory;

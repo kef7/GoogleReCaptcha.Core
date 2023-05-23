@@ -1,15 +1,8 @@
-﻿using GoogleReCaptcha.Core.Settings;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Builder;
 
 namespace GoogleReCaptcha.Core
 {
-	public static class ApplicationBuilderExtensions
+    public static class ApplicationBuilderExtensions
 	{
 		private static bool s_basePrevCalled = false;
 

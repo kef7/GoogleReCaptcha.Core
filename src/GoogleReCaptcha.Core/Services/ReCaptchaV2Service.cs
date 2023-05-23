@@ -1,21 +1,13 @@
-﻿using GoogleReCaptcha.Core.Services.Models;
-using GoogleReCaptcha.Core.Settings;
-using Microsoft.AspNetCore.Mvc;
+﻿using GoogleReCaptcha.Core.Settings;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core.Services
 {
-	/// <summary>
-	/// Service for Google ReCaptcha V2; can verify user token with Google if configured correctly
-	/// </summary>
-	public class ReCaptchaV2Service : ReCaptchaServiceBase, IReCaptchaV2Service
+    /// <summary>
+    /// Service for Google ReCaptcha V2; can verify user token with Google if configured correctly
+    /// </summary>
+    public class ReCaptchaV2Service : ReCaptchaServiceBase, IReCaptchaV2Service
 	{
 		#region Properties
 

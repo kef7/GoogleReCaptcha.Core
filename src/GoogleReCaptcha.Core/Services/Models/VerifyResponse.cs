@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace GoogleReCaptcha.Core.Services.Models
 {
-	/// <summary>
-	/// Model of Google's ReCaptcha verify response
-	/// </summary>
-	public class VerifyResponse
+    /// <summary>
+    /// Model of Google's ReCaptcha verify response
+    /// </summary>
+    public class VerifyResponse
 	{
 		/// <summary>
 		/// Whether the request was a valid ReCaptcha token

@@ -2,18 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
-	/// <summary>
-	/// Tag helper to assist in getting Google Lib/JS url into script tag
-	/// </summary>
-	[HtmlTargetElement(TAG)]
+    /// <summary>
+    /// Tag helper to assist in getting Google Lib/JS url into script tag
+    /// </summary>
+    [HtmlTargetElement(TAG)]
 	[HtmlTargetElement("script", Attributes = ATTR_FROMSETTINGS)]
 	[HtmlTargetElement("script", Attributes = ATTR_LIBURL + "," + ATTR_USE_EXPLICIT_DEFAULT + "," + ATTR_SET_EXPLICIT_CALLBACK)]
 	public class ScriptTagHelper : TagHelperBase

@@ -1,9 +1,8 @@
 ﻿using GoogleReCaptcha.Core.Services.Models;
-using System;
 
 namespace GoogleReCaptcha.Core.Services
 {
-	public class ReCaptchaVerifyException : Exception
+    public class ReCaptchaVerifyException : Exception
 	{
 		#region Fields
 

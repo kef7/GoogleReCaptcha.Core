@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
-	public interface IReCaptchaV3Service : IReCaptchaService
+    public interface IReCaptchaV3Service : IReCaptchaService
 	{
 		/// <summary>
 		/// Verify reCAPTCHA with a passing value that is equal to or greater then the response score value

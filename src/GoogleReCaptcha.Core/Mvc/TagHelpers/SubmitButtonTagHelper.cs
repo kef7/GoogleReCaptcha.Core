@@ -3,18 +3,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
-	/// <summary>
-	/// Tag helper to assist in adding Google ReCaptcah v2/v3 data attributes from settings configured in appsettings.json into a submit button
-	/// </summary>
-	/// <remarks>
-	/// Use this with invisible captcha for v2 or v3.
-	/// </remarks>
-	[HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
+    /// <summary>
+    /// Tag helper to assist in adding Google ReCaptcah v2/v3 data attributes from settings configured in appsettings.json into a submit button
+    /// </summary>
+    /// <remarks>
+    /// Use this with invisible captcha for v2 or v3.
+    /// </remarks>
+    [HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
 	[HtmlTargetElement("button", Attributes = ATTR_FROMSETTINGS, TagStructure = TagStructure.NormalOrSelfClosing)] // Just to get it to call
 	[HtmlTargetElement("button", Attributes = ATTR_ACTION + "," + ATTR_CALLBACK + "," + ATTR_SITEKEY, TagStructure = TagStructure.NormalOrSelfClosing)]
 	public class SubmitButtonTagHelper : TagHelperBase

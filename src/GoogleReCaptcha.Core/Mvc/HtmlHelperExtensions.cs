@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GoogleReCaptcha.Core.Mvc
 {
-	/// <summary>
-	/// HtmlHelper extensions for ReCaptcha settings
-	/// </summary>
-	/// <remarks>
-	/// Requires use of middlware <see cref="ReCaptchaSettingsHttpContextItemsInjectionMiddleware"/>
-	/// </remarks>
-	public static class HtmlHelperExtensions
+    /// <summary>
+    /// HtmlHelper extensions for ReCaptcha settings
+    /// </summary>
+    /// <remarks>
+    /// Requires use of middlware <see cref="ReCaptchaSettingsHttpContextItemsInjectionMiddleware"/>
+    /// </remarks>
+    public static class HtmlHelperExtensions
 	{
 		public static IHtmlContent ReCaptchaV2SiteKey<TModel>(this IHtmlHelper<TModel> @this)
 		{

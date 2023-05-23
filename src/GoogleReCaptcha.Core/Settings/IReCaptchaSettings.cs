@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public interface IReCaptchaSettings
+    public interface IReCaptchaSettings
 	{
 		bool Enabled { get; }
 		string LibUrl { get; }

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
-	public abstract class TagHelperBase : TagHelper
+    public abstract class TagHelperBase : TagHelper
 	{
 		#region Properties
 

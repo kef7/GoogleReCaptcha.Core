@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
-	public class ReCaptchaServiceException : Exception
+    public class ReCaptchaServiceException : Exception
 	{
 		#region Fields
 

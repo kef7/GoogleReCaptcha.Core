@@ -2,16 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Core.Services
 {
-	public abstract class ReCaptchaServiceBase
+    public abstract class ReCaptchaServiceBase
 	{
 		#region Fields
 

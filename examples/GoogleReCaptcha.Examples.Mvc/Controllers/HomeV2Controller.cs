@@ -1,14 +1,11 @@
 ﻿using GoogleReCaptcha.Core.Services;
 using GoogleReCaptcha.Examples.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GoogleReCaptcha.Examples.Mvc.Controllers
 {
-	public class HomeV2Controller : Controller
+    public class HomeV2Controller : Controller
 	{
 		public IReCaptchaV2Service ReCaptchaService { get; }
 

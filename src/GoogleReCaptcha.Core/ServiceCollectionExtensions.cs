@@ -6,15 +6,13 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
 
 namespace GoogleReCaptcha.Core
 {
-	/// <summary>
-	/// Service collection extensions for ReCaptcah V3 usage
-	/// </summary>
-	public static class ServiceCollectionExtensions
+    /// <summary>
+    /// Service collection extensions for ReCaptcah V3 usage
+    /// </summary>
+    public static class ServiceCollectionExtensions
 	{
 		#region Static Fields
 
