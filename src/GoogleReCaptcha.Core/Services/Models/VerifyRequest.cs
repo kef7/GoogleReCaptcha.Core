@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-
-namespace GoogleReCaptcha.Core.Services.Models
+﻿namespace GoogleReCaptcha.Core.Services.Models
 {
+	using System.Text.Json.Serialization;
+
 	/// <summary>
 	/// Model of Google's ReCaptcha verify request
 	/// </summary>

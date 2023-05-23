@@ -1,56 +1,56 @@
-﻿using GoogleReCaptcha.Core.Services.Models;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
+    using GoogleReCaptcha.Core.Services.Models;
+
     public class ReCaptchaVerifyException : Exception
-	{
-		#region Fields
+    {
+        #region Fields
 
-		private const string DEFAULT_MESSAGE = "Google ReCaptcha errored or the response contains errors.";
+        private const string DEFAULT_MESSAGE = "Google ReCaptcha errored or the response contains errors.";
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public VerifyResponse Response { get; private set; } = null;
+        public VerifyResponse Response { get; private set; } = null;
 
-		#endregion
+        #endregion
 
-		#region Constuctors
+        #region Constuctors
 
-		public ReCaptchaVerifyException()
-			: base(DEFAULT_MESSAGE)
-		{
-		}
+        public ReCaptchaVerifyException()
+            : base(DEFAULT_MESSAGE)
+        {
+        }
 
-		public ReCaptchaVerifyException(VerifyResponse response)
-			: base(DEFAULT_MESSAGE)
-		{
-			Response = response;
-		}
+        public ReCaptchaVerifyException(VerifyResponse response)
+            : base(DEFAULT_MESSAGE)
+        {
+            Response = response;
+        }
 
-		public ReCaptchaVerifyException(string message, VerifyResponse response)
-			: base(message)
-		{
-			Response = response;
-		}
+        public ReCaptchaVerifyException(string message, VerifyResponse response)
+            : base(message)
+        {
+            Response = response;
+        }
 
-		public ReCaptchaVerifyException(string message, Exception innerException, VerifyResponse response)
-			: base(message, innerException)
-		{
-			Response = response;
-		}
+        public ReCaptchaVerifyException(string message, Exception innerException, VerifyResponse response)
+            : base(message, innerException)
+        {
+            Response = response;
+        }
 
-		public ReCaptchaVerifyException(Exception innerException, VerifyResponse response)
-			: base(DEFAULT_MESSAGE, innerException)
-		{
-			Response = response;
-		}
+        public ReCaptchaVerifyException(Exception innerException, VerifyResponse response)
+            : base(DEFAULT_MESSAGE, innerException)
+        {
+            Response = response;
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		#endregion
-	}
+        #endregion
+    }
 }

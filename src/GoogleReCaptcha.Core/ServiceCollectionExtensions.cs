@@ -1,370 +1,370 @@
-﻿using GoogleReCaptcha.Core.Services;
-using GoogleReCaptcha.Core.Settings;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-namespace GoogleReCaptcha.Core
+﻿namespace GoogleReCaptcha.Core
 {
+    using GoogleReCaptcha.Core.Services;
+    using GoogleReCaptcha.Core.Settings;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using Microsoft.AspNetCore.Mvc.Routing;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
     /// <summary>
     /// Service collection extensions for ReCaptcah V3 usage
     /// </summary>
     public static class ServiceCollectionExtensions
-	{
-		#region Static Fields
+    {
+        #region Static Fields
 
-		private static bool s_sharedPrevCalled = false;
+        private static bool s_sharedPrevCalled = false;
 
-		#endregion
+        #endregion
 
-		#region Shared
+        #region Shared
 
-		/// <summary>
-		/// Add services shared between V2 & V3
-		/// </summary>
-		/// <param name="services">Service collection object used to add services</param>
-		/// <param name="settings">ReCaptcah root settings object</param>
-		private static void AddSharedServices(IServiceCollection services, IReCaptchaSettings settings)
-		{
-			// Add root settings for DI
-			services.AddScoped<IReCaptchaSettings>((serviceProvider) =>
-			{
-				return settings;
-			});
+        /// <summary>
+        /// Add services shared between V2 & V3
+        /// </summary>
+        /// <param name="services">Service collection object used to add services</param>
+        /// <param name="settings">ReCaptcah root settings object</param>
+        private static void AddSharedServices(IServiceCollection services, IReCaptchaSettings settings)
+        {
+            // Add root settings for DI
+            services.AddScoped<IReCaptchaSettings>((serviceProvider) =>
+            {
+                return settings;
+            });
 
-			if (!s_sharedPrevCalled)
-			{
-				// Add logging
-				services.AddLogging();
+            if (!s_sharedPrevCalled)
+            {
+                // Add logging
+                services.AddLogging();
 
-				// Add IActionContextAccessor for IUrlHelper DI
-				services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+                // Add IActionContextAccessor for IUrlHelper DI
+                services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-				// Add IUrlHelper for DI
-				services.AddScoped<IUrlHelper>((serviceProvider) =>
-				{
-					var actionContext = serviceProvider.GetRequiredService<IActionContextAccessor>().ActionContext;
-					var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
-					return factory.GetUrlHelper(actionContext);
-				});
+                // Add IUrlHelper for DI
+                services.AddScoped<IUrlHelper>((serviceProvider) =>
+                {
+                    var actionContext = serviceProvider.GetRequiredService<IActionContextAccessor>().ActionContext;
+                    var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
+                    return factory.GetUrlHelper(actionContext);
+                });
 
-				// Add IHttpClientFactory for ID
-				services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT_NAME, (httpClient) =>
-				{
-					if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
-					{
-						httpClient.BaseAddress = new Uri(settings.ApiUrl);
-					}
-					httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
-				});
+                // Add IHttpClientFactory for ID
+                services.AddHttpClient(Constants.DEFAULT_HTTP_CLIENT_NAME, (httpClient) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+                    {
+                        httpClient.BaseAddress = new Uri(settings.ApiUrl);
+                    }
+                    httpClient.DefaultRequestHeaders.Add("Accepts", "application/json");
+                });
 
-				// Flag to to call again
-				s_sharedPrevCalled = true;
-			}
-		}
+                // Flag to to call again
+                s_sharedPrevCalled = true;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region V2 Service Methods
+        #region V2 Service Methods
 
-		/// <summary>
-		/// Process and validate <see cref="ReCaptchaV2Settings"/>
-		/// </summary>
-		/// <param name="settings">Instance of settings that will be used for processing</param>
-		private static void ProcessValidateV2Settings(ReCaptchaV2Settings settings)
-		{
-			if (settings == null)
-			{
-				throw new ArgumentNullException(nameof(settings));
-			}
+        /// <summary>
+        /// Process and validate <see cref="ReCaptchaV2Settings"/>
+        /// </summary>
+        /// <param name="settings">Instance of settings that will be used for processing</param>
+        private static void ProcessValidateV2Settings(ReCaptchaV2Settings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
 
-			// Lib url
-			if (!string.IsNullOrWhiteSpace(settings.LibUrl))
-			{
-				if (!Uri.IsWellFormedUriString(settings.LibUrl, UriKind.RelativeOrAbsolute))
-				{
-					throw new UriFormatException($"Invalid URI property {nameof(settings.LibUrl)}");
-				}
-			}
-			else
-			{
-				settings.LibUrl = Constants.DEFAULT_V2_LIBURL;
-			}
+            // Lib url
+            if (!string.IsNullOrWhiteSpace(settings.LibUrl))
+            {
+                if (!Uri.IsWellFormedUriString(settings.LibUrl, UriKind.RelativeOrAbsolute))
+                {
+                    throw new UriFormatException($"Invalid URI property {nameof(settings.LibUrl)}");
+                }
+            }
+            else
+            {
+                settings.LibUrl = Constants.DEFAULT_V2_LIBURL;
+            }
 
-			// Api url
-			if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
-			{
-				if (!Uri.IsWellFormedUriString(settings.ApiUrl, UriKind.RelativeOrAbsolute))
-				{
-					throw new UriFormatException($"Invalid URI property {nameof(settings.ApiUrl)}");
-				}
+            // Api url
+            if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+            {
+                if (!Uri.IsWellFormedUriString(settings.ApiUrl, UriKind.RelativeOrAbsolute))
+                {
+                    throw new UriFormatException($"Invalid URI property {nameof(settings.ApiUrl)}");
+                }
 
-				// Fix missing trailing slash
-				if (!settings.ApiUrl.EndsWith("/"))
-				{
-					settings.ApiUrl = settings.ApiUrl + "/";
-				}
-			}
-			else
-			{
-				settings.ApiUrl = Constants.DEFAULT_V2_APIURL;
-			}
+                // Fix missing trailing slash
+                if (!settings.ApiUrl.EndsWith("/"))
+                {
+                    settings.ApiUrl = settings.ApiUrl + "/";
+                }
+            }
+            else
+            {
+                settings.ApiUrl = Constants.DEFAULT_V2_APIURL;
+            }
 
-			// Site key
-			if (string.IsNullOrWhiteSpace(settings.SiteKey))
-			{
-				throw new ArgumentException($"Invalid property {nameof(settings.SiteKey)}");
-			}
+            // Site key
+            if (string.IsNullOrWhiteSpace(settings.SiteKey))
+            {
+                throw new ArgumentException($"Invalid property {nameof(settings.SiteKey)}");
+            }
 
-			// Secret key
-			if (string.IsNullOrWhiteSpace(settings.SecretKey))
-			{
-				throw new ArgumentException($"Invalid property {nameof(settings.SecretKey)}");
-			}
-		}
+            // Secret key
+            if (string.IsNullOrWhiteSpace(settings.SecretKey))
+            {
+                throw new ArgumentException($"Invalid property {nameof(settings.SecretKey)}");
+            }
+        }
 
-		/// <summary>
-		/// Adds base V2 services
-		/// </summary>
-		/// <param name="services">Service colleciont to use to add support too</param>
-		/// <param name="settings">ReCaptcha settings to use for service</param>
-		private static void AddV2BaseServices(IServiceCollection services, ReCaptchaV2Settings settings)
-		{
-			// Process settings
-			ProcessValidateV2Settings(settings);
+        /// <summary>
+        /// Adds base V2 services
+        /// </summary>
+        /// <param name="services">Service colleciont to use to add support too</param>
+        /// <param name="settings">ReCaptcha settings to use for service</param>
+        private static void AddV2BaseServices(IServiceCollection services, ReCaptchaV2Settings settings)
+        {
+            // Process settings
+            ProcessValidateV2Settings(settings);
 
-			// Add shared services
-			AddSharedServices(services, settings);
+            // Add shared services
+            AddSharedServices(services, settings);
 
-			// Add settings for DI
-			services.AddScoped<IReCaptchaV2Settings>((serviceProvider) =>
-			{
-				return settings;
-			});
+            // Add settings for DI
+            services.AddScoped<IReCaptchaV2Settings>((serviceProvider) =>
+            {
+                return settings;
+            });
 
-			// Add V2 service
-			services.AddScoped<IReCaptchaV2Service, ReCaptchaV2Service>((serviceProvider) =>
-			{
-				// Get required services
-				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV2Service>>();
-				var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
-				var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            // Add V2 service
+            services.AddScoped<IReCaptchaV2Service, ReCaptchaV2Service>((serviceProvider) =>
+            {
+                // Get required services
+                var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV2Service>>();
+                var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
+                var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-				// Build v2 service
-				var v2Service = new ReCaptchaV2Service(logger, actionContextAccessor, httpContextFactory, settings);
-				return v2Service;
-			});
-		}
+                // Build v2 service
+                var v2Service = new ReCaptchaV2Service(logger, actionContextAccessor, httpContextFactory, settings);
+                return v2Service;
+            });
+        }
 
-		/// <summary>
-		/// Add ReCaptcha V2 services support
-		/// </summary>
-		/// <param name="this">Service colleciont to use to add support too</param>
-		/// <param name="config">Current configuration</param>
-		/// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
-		/// <remarks>
-		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
-		/// </remarks>
-		public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
-		{
-			if (config == null)
-			{
-				throw new ArgumentNullException(nameof(config));
-			}
+        /// <summary>
+        /// Add ReCaptcha V2 services support
+        /// </summary>
+        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="config">Current configuration</param>
+        /// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+        /// <remarks>
+        /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+        /// </remarks>
+        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
 
-			// Get V2 settings from config
-			settingsKey = settingsKey ?? "GoogleReCaptcha:V2";
-			var configSection = config.GetSection(settingsKey);
-			var settings = configSection.Get<ReCaptchaV2Settings>();
+            // Get V2 settings from config
+            settingsKey = settingsKey ?? "GoogleReCaptcha:V2";
+            var configSection = config.GetSection(settingsKey);
+            var settings = configSection.Get<ReCaptchaV2Settings>();
 
-			// Add V3 services
-			AddV2BaseServices(@this, settings);
-		}
+            // Add V3 services
+            AddV2BaseServices(@this, settings);
+        }
 
-		/// <summary>
-		/// Add ReCaptcha V2 services support
-		/// </summary>
-		/// <param name="this">Service colleciont to use to add support too</param>
-		/// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
-		/// <remarks>
-		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
-		/// </remarks>
-		public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsAction)
-		{
-			if (getSettingsAction == null)
-			{
-				throw new ArgumentNullException(nameof(getSettingsAction));
-			}
+        /// <summary>
+        /// Add ReCaptcha V2 services support
+        /// </summary>
+        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+        /// <remarks>
+        /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+        /// </remarks>
+        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsAction)
+        {
+            if (getSettingsAction == null)
+            {
+                throw new ArgumentNullException(nameof(getSettingsAction));
+            }
 
-			// Get V2 settings from func
-			var settings = getSettingsAction() as ReCaptchaV2Settings;
+            // Get V2 settings from func
+            var settings = getSettingsAction() as ReCaptchaV2Settings;
 
-			// Add V2 services
-			AddV2BaseServices(@this, settings);
-		}
+            // Add V2 services
+            AddV2BaseServices(@this, settings);
+        }
 
-		#endregion
+        #endregion
 
-		#region V3 Service Methods
+        #region V3 Service Methods
 
-		/// <summary>
-		/// Process and validate ReCaptchaV3Settings
-		/// </summary>
-		/// <param name="settings">Instance of settings that will be used for processing</param>
-		private static void ProcessValidateV3Settings(ReCaptchaV3Settings settings)
-		{
-			if (settings == null)
-			{
-				throw new ArgumentNullException(nameof(settings));
-			}
+        /// <summary>
+        /// Process and validate ReCaptchaV3Settings
+        /// </summary>
+        /// <param name="settings">Instance of settings that will be used for processing</param>
+        private static void ProcessValidateV3Settings(ReCaptchaV3Settings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
 
-			// Lib url
-			if (!string.IsNullOrWhiteSpace(settings.LibUrl))
-			{
-				if (!Uri.IsWellFormedUriString(settings.LibUrl, UriKind.RelativeOrAbsolute))
-				{
-					throw new UriFormatException($"Invalid URI property {nameof(settings.LibUrl)}");
-				}
-			}
-			else
-			{
-				settings.LibUrl = Constants.DEFAULT_V3_LIBURL;
-			}
+            // Lib url
+            if (!string.IsNullOrWhiteSpace(settings.LibUrl))
+            {
+                if (!Uri.IsWellFormedUriString(settings.LibUrl, UriKind.RelativeOrAbsolute))
+                {
+                    throw new UriFormatException($"Invalid URI property {nameof(settings.LibUrl)}");
+                }
+            }
+            else
+            {
+                settings.LibUrl = Constants.DEFAULT_V3_LIBURL;
+            }
 
-			// Api url
-			if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
-			{
-				if (!Uri.IsWellFormedUriString(settings.ApiUrl, UriKind.RelativeOrAbsolute))
-				{
-					throw new UriFormatException($"Invalid URI property {nameof(settings.ApiUrl)}");
-				}
+            // Api url
+            if (!string.IsNullOrWhiteSpace(settings.ApiUrl))
+            {
+                if (!Uri.IsWellFormedUriString(settings.ApiUrl, UriKind.RelativeOrAbsolute))
+                {
+                    throw new UriFormatException($"Invalid URI property {nameof(settings.ApiUrl)}");
+                }
 
-				// Fix missing trailing slash
-				if (!settings.ApiUrl.EndsWith("/"))
-				{
-					settings.ApiUrl = settings.ApiUrl + "/";
-				}
-			}
-			else
-			{
-				settings.ApiUrl = Constants.DEFAULT_V3_APIURL;
-			}
+                // Fix missing trailing slash
+                if (!settings.ApiUrl.EndsWith("/"))
+                {
+                    settings.ApiUrl = settings.ApiUrl + "/";
+                }
+            }
+            else
+            {
+                settings.ApiUrl = Constants.DEFAULT_V3_APIURL;
+            }
 
-			// Site key
-			if (string.IsNullOrWhiteSpace(settings.SiteKey))
-			{
-				throw new ArgumentException($"Invalid property {nameof(settings.SiteKey)}");
-			}
+            // Site key
+            if (string.IsNullOrWhiteSpace(settings.SiteKey))
+            {
+                throw new ArgumentException($"Invalid property {nameof(settings.SiteKey)}");
+            }
 
-			// Secret key
-			if (string.IsNullOrWhiteSpace(settings.SecretKey))
-			{
-				throw new ArgumentException($"Invalid property {nameof(settings.SecretKey)}");
-			}
+            // Secret key
+            if (string.IsNullOrWhiteSpace(settings.SecretKey))
+            {
+                throw new ArgumentException($"Invalid property {nameof(settings.SecretKey)}");
+            }
 
-			// Default passing score
-			if (settings.DefaultPassingScore < 0)
-			{
-				settings.DefaultPassingScore = Constants.DEFAULT_V3_PASSING_SCORE;
-			}
-		}
+            // Default passing score
+            if (settings.DefaultPassingScore < 0)
+            {
+                settings.DefaultPassingScore = Constants.DEFAULT_V3_PASSING_SCORE;
+            }
+        }
 
-		/// <summary>
-		/// Adds base V3 services
-		/// </summary>
-		/// <param name="services">Service colleciont to use to add support too</param>
-		/// <param name="settings">ReCaptcha settings to use for service</param>
-		private static void AddV3BaseServices(IServiceCollection services, ReCaptchaV3Settings settings)
-		{
-			// Process settings
-			ProcessValidateV3Settings(settings);
+        /// <summary>
+        /// Adds base V3 services
+        /// </summary>
+        /// <param name="services">Service colleciont to use to add support too</param>
+        /// <param name="settings">ReCaptcha settings to use for service</param>
+        private static void AddV3BaseServices(IServiceCollection services, ReCaptchaV3Settings settings)
+        {
+            // Process settings
+            ProcessValidateV3Settings(settings);
 
-			// Add shared services
-			AddSharedServices(services, settings);
+            // Add shared services
+            AddSharedServices(services, settings);
 
-			// Add settings for DI
-			services.AddScoped<IReCaptchaV3Settings>((serviceProvider) =>
-			{
-				return settings;
-			});
+            // Add settings for DI
+            services.AddScoped<IReCaptchaV3Settings>((serviceProvider) =>
+            {
+                return settings;
+            });
 
-			// Add V3 service using base interface; default service to use is V3
-			services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
-			{
-				// Get required services
-				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
-				var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
-				var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            // Add V3 service using base interface; default service to use is V3
+            services.AddScoped<IReCaptchaService, ReCaptchaV3Service>((serviceProvider) =>
+            {
+                // Get required services
+                var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
+                var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
+                var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-				// Build v3 service
-				var v3Service = new ReCaptchaV3Service(logger, actionContextAccessor, httpContextFactory, settings);
-				return v3Service;
-			});
+                // Build v3 service
+                var v3Service = new ReCaptchaV3Service(logger, actionContextAccessor, httpContextFactory, settings);
+                return v3Service;
+            });
 
-			// Add V3 service
-			services.AddScoped<IReCaptchaV3Service, ReCaptchaV3Service>((serviceProvider) =>
-			{
-				// Get required services
-				var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
-				var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
-				var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            // Add V3 service
+            services.AddScoped<IReCaptchaV3Service, ReCaptchaV3Service>((serviceProvider) =>
+            {
+                // Get required services
+                var logger = serviceProvider.GetRequiredService<ILogger<ReCaptchaV3Service>>();
+                var actionContextAccessor = serviceProvider.GetRequiredService<IActionContextAccessor>();
+                var httpContextFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-				// Build v3 service
-				var v3Service = new ReCaptchaV3Service(logger, actionContextAccessor, httpContextFactory, settings);
-				return v3Service;
-			});
-		}
+                // Build v3 service
+                var v3Service = new ReCaptchaV3Service(logger, actionContextAccessor, httpContextFactory, settings);
+                return v3Service;
+            });
+        }
 
-		/// <summary>
-		/// Add ReCaptcha V3 services support
-		/// </summary>
-		/// <param name="this">Service colleciont to use to add support too</param>
-		/// <param name="config">Current configuration</param>
-		/// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
-		/// <remarks>
-		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
-		/// </remarks>
-		public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
-		{
-			if (config == null)
-			{
-				throw new ArgumentNullException(nameof(config));
-			}
+        /// <summary>
+        /// Add ReCaptcha V3 services support
+        /// </summary>
+        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="config">Current configuration</param>
+        /// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+        /// <remarks>
+        /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+        /// </remarks>
+        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
 
-			// Get V3 settings from config
-			settingsKey = settingsKey ?? "GoogleReCaptcha:V3";
-			var configSection = config.GetSection(settingsKey);
-			var settings = configSection.Get<ReCaptchaV3Settings>();
+            // Get V3 settings from config
+            settingsKey = settingsKey ?? "GoogleReCaptcha:V3";
+            var configSection = config.GetSection(settingsKey);
+            var settings = configSection.Get<ReCaptchaV3Settings>();
 
-			// Add V3 services
-			AddV3BaseServices(@this, settings);
-		}
+            // Add V3 services
+            AddV3BaseServices(@this, settings);
+        }
 
-		/// <summary>
-		/// Add ReCaptcha V3 services support
-		/// </summary>
-		/// <param name="this">Service colleciont to use to add support too</param>
-		/// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
-		/// <remarks>
-		/// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
-		/// </remarks>
-		public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsAction)
-		{
-			if (getSettingsAction == null)
-			{
-				throw new ArgumentNullException(nameof(getSettingsAction));
-			}
+        /// <summary>
+        /// Add ReCaptcha V3 services support
+        /// </summary>
+        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+        /// <remarks>
+        /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
+        /// </remarks>
+        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsAction)
+        {
+            if (getSettingsAction == null)
+            {
+                throw new ArgumentNullException(nameof(getSettingsAction));
+            }
 
-			// Get V3 settings from func
-			var settings = getSettingsAction() as ReCaptchaV3Settings;
+            // Get V3 settings from func
+            var settings = getSettingsAction() as ReCaptchaV3Settings;
 
-			// Add V3 services
-			AddV3BaseServices(@this, settings);
-		}
+            // Add V3 services
+            AddV3BaseServices(@this, settings);
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
