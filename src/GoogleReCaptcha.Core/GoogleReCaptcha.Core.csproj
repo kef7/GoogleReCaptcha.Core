@@ -15,6 +15,10 @@
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)' != 'Release'">
+		<Version>$(Version)-$(Configuration.ToLower())</Version>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\readme.md" Pack="true" PackagePath="$(PackageReadmeFile)">
 			<Visible>false</Visible>
