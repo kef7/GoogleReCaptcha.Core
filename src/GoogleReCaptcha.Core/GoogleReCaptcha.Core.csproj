@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;.NET Standard 2.1;netstandard2.1;netcore;.NET Core;net6;.NET 6;ASP.NET Core;ASP.NET Core MVC</PackageTags>
+		<PackageTags>Google reCAPTCHA;reCAPTCHA;captcha;net6;.NET 6;ASP.NET Core;ASP.NET Core MVC</PackageTags>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
