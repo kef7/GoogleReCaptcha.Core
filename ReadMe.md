@@ -1,6 +1,6 @@
 # GoogleReCaptcha.Core
 
-A small library in .NET Standard form for using Google reCAPTCHA within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms. Supports v2 and v3 versions; v3 is default version assumed to be used.
+A small library for using Google reCAPTCHA within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms. Supports v2 and v3 versions; v3 is default version assumed to be used.
 
 Follow the steps below to utilize this library to add Google reCAPTCHA support to your projects.
 
