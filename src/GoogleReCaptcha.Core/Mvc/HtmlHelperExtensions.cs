@@ -31,7 +31,7 @@
         /// <returns>HTML content</returns>
         public static IHtmlContent ReCaptchaV2Theme<TModel>(this IHtmlHelper<TModel> htmlHelper)
         {
-            var siteKey = htmlHelper.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V2_THEME]?.ToString().ToLower() ?? "";
+            var siteKey = htmlHelper.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V2_THEME]?.ToString()?.ToLower() ?? "";
             return new HtmlString(siteKey);
         }
 
@@ -43,7 +43,7 @@
         /// <returns>HTML content</returns>
         public static IHtmlContent ReCaptchaV2Size<TModel>(this IHtmlHelper<TModel> htmlHelper)
         {
-            var siteKey = htmlHelper.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V2_SIZE]?.ToString().ToLower() ?? "";
+            var siteKey = htmlHelper.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V2_SIZE]?.ToString()?.ToLower() ?? "";
             return new HtmlString(siteKey);
         }
 
@@ -53,9 +53,9 @@
         /// <typeparam name="TModel">Model type</typeparam>
         /// <param name="htmlHelper">Reference to <paramref name="htmlHelper"/></param>
         /// <returns>HTML content</returns>
-        public static IHtmlContent ReCaptchaV3SiteKey<TModel>(this IHtmlHelper<TModel> @this)
+        public static IHtmlContent ReCaptchaV3SiteKey<TModel>(this IHtmlHelper<TModel> htmlHelper)
         {
-            var siteKey = @this.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V3_SITEKEY]?.ToString() ?? "";
+            var siteKey = htmlHelper.ViewContext.HttpContext.Items[Constants.HTTPCTX_KEY_V3_SITEKEY]?.ToString() ?? "";
             return new HtmlString(siteKey);
         }
     }
