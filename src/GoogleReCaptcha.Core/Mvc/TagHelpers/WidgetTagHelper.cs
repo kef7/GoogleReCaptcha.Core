@@ -81,13 +81,13 @@
         /// </summary>
         [HtmlAttributeNotBound]
         [ViewContext]
-        public ViewContext ViewContext { get; set; }
+        public ViewContext? ViewContext { get; set; }
 
         /// <summary>
         /// Site key attribute; will attempt to use from configured settings if not defined
         /// </summary>
         [HtmlAttributeName(ATTR_SITEKEY)]
-        public string SiteKey { get; set; }
+        public string? SiteKey { get; set; }
 
         /// <summary>
         /// V2 theme attribute; will attempt to use from configured settings if not defined
@@ -111,19 +111,19 @@
         /// Call-back function; executed when the use submits a successful response (token passed into it)
         /// </summary>
         [HtmlAttributeName(ATTR_CALLBACK)]
-        public string CallBack { get; set; }
+        public string? CallBack { get; set; }
 
         /// <summary>
         /// Expired call-back function; executed when reCAPTCHA response expires and the user needs to re-verify
         /// </summary>
         [HtmlAttributeName(ATTR_EXP_CALLBACK)]
-        public string ExpiredCallBack { get; set; }
+        public string? ExpiredCallBack { get; set; }
 
         /// <summary>
         /// Error call-back function; executed when script encounters an error
         /// </summary>
         [HtmlAttributeName(ATTR_ERR_CALLBACK)]
-        public string ErrorCallBack { get; set; }
+        public string? ErrorCallBack { get; set; }
 
         #endregion
 

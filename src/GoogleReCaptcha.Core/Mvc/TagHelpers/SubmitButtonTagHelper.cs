@@ -67,7 +67,7 @@
         /// </summary>
         [HtmlAttributeNotBound]
         [ViewContext]
-        public ViewContext ViewContext { get; set; }
+        public ViewContext? ViewContext { get; set; }
 
         /// <summary>
         /// From settings attribute; flag and target key; will override src if ture
@@ -82,19 +82,19 @@
         /// Custom named action for analysis. See Google's documentation on <see href="https://developers.google.com/recaptcha/docs/v3#actions">actions</see>.
         /// </remarks>
         [HtmlAttributeName(ATTR_ACTION)]
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
         /// <summary>
         /// Call back func sig attribute
         /// </summary>
         [HtmlAttributeName(ATTR_CALLBACK)]
-        public string CallBack { get; set; }
+        public string? CallBack { get; set; }
 
         /// <summary>
         /// Site key attribute
         /// </summary>
         [HtmlAttributeName(ATTR_SITEKEY)]
-        public string SiteKey { get; set; }
+        public string? SiteKey { get; set; }
 
         /// <summary>
         /// Button type attribute

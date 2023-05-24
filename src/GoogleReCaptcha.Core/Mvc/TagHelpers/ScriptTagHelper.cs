@@ -68,7 +68,7 @@
         /// Library url attribute
         /// </summary>
         [HtmlAttributeName(ATTR_LIBURL)]
-        public string LibUrl { get; set; }
+        public string? LibUrl { get; set; }
 
         /// <summary>
         /// Get or set flag informing scrpit to use explicit flag with default call-back javascript function name
@@ -80,7 +80,7 @@
         /// Get or set explicit call-back javascript function name; will also set explicit flag in url
         /// </summary>
         [HtmlAttributeName(ATTR_SET_EXPLICIT_CALLBACK)]
-        public string ExplicitCallBack { get; set; }
+        public string? ExplicitCallBack { get; set; }
 
         #endregion
 
@@ -149,7 +149,7 @@
             if (string.IsNullOrWhiteSpace(LibUrl))
             {
                 // Set to null
-                LibUrl = null!;
+                LibUrl = null;
 
                 // Pull from src
                 Logger.LogTrace("Get lib url already present in tag src");
