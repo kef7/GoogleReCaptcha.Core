@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>GoogleReCaptcha.Examples.Mvc</AssemblyName>
     <RootNamespace>GoogleReCaptcha.Examples.Mvc</RootNamespace>
+    <UserSecretsId>ee68e126-d381-49d3-a240-c37360a66d85</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

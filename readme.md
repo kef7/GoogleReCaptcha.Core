@@ -1,6 +1,6 @@
 # GoogleReCaptcha.Core
 
-A small library in .NET Standard form for using Google reCAPTCHA within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms. Supports v2 and v3 versions; v3 is default version assumed to be used.
+A small library for using Google reCAPTCHA v2 or v3 within an ASP.NET MVC applications. Features standard methods for configuring reCAPTCHA via appsettings.json or custom. Has ability to call Google's verify endpoint after submission of page forms. Supports v2 and v3 versions; v3 is default version assumed to be used.
 
 Follow the steps below to utilize this library to add Google reCAPTCHA support to your projects.
 
@@ -38,7 +38,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     ...
 
-    services.AddGoogleReCaptchaV3(Configuration); // Add Google ReCaptcha V3 support
+    services.AddGoogleReCaptchaV3(Configuration); // Add Google reCAPTCHA v3 support
 
     ...
 }
@@ -51,7 +51,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     ...
 
-    // Add Google ReCaptcha V3 support
+    // Add Google reCAPTCHA v3 support
     services.AddGoogleReCaptchaV3(() =>
     {
         return new ReCaptchaV3Settings
@@ -69,7 +69,7 @@ ___
 
 ## Startup Settings Configuration
 
-You can apply your Google reCAPTCHA version 3 configuration settings in `appsettings.json` like so:
+You can apply your Google reCAPTCHA v3 configuration settings in `appsettings.json` like so:
 
 ```json
 {
@@ -110,7 +110,7 @@ You will need to add the tag helpers in your views path, probably in the `~/View
 
 ### Add ReCaptcha Script
 
-Add the Google ReCaptcha script using the `</g-recaptcha-script>` tag. This will pull the Google reCAPTCHA javascript library into your view with your settings applied:
+Add the Google reCAPTCHA script using the `</g-recaptcha-script>` tag. This will pull the Google reCAPTCHA javascript library into your view with your settings applied:
 
 ```html
 <g-recaptcha-script></g-recaptcha-script>
@@ -122,9 +122,9 @@ Add the Google ReCaptcha script using the `</g-recaptcha-script>` tag. This will
 <script g-recaptcha-from-settings="true" ... ></script>
 ```
 
-### Add ReCaptcha Submit Button
+### Add reCAPTCHA Aware Submit Button
 
-You will need to add the Google ReCaptcha submit button using `</g-recaptcha-submit-button>`. This tag helper will apply Google's required data attributes into a new `</button>` element in your view using your settings. It applies `submit` value to the `data-action` attribute. The default `data-callback` will be a function you will need to define later named `onGReCaptchaV3Submit` that accepts Google's reCAPTCHA `token` value for the current form's processing.
+You will need to add the Google reCAPTCHA aware submit button using `</g-recaptcha-submit-button>`. This tag helper will apply Google's required data attributes into a new `</button>` element in your view using your settings. It applies `submit` value to the `data-action` attribute. The default `data-callback` will be a function you will need to define later named `onGReCaptchaV3Submit` that accepts Google's reCAPTCHA `token` value for the current form's processing.
 
 Apply the submit button like so:
 
@@ -138,7 +138,7 @@ Apply the submit button like so:
 <g-recaptcha-submit-button class="btn btn-primary"><span class="fa fa-arrow-circle-up"></span> Submit</g-recaptcha-submit-button>
 ```
 
-### Add ReCaptcha JS Function
+### Add reCAPTCHA JS Function
 
 By default the `</g-recaptcha-script>` is looking for a javascript function named `onGReCaptchaV3Submit` which accepts one value, the `token` for the current form's processing. You can define this function and form as below:
 
@@ -162,19 +162,19 @@ function onGReCaptchaV3Submit(token) {
     
     ...
 
-    <!-- Setup Google ReCaptcha supported submit button -->
+    <!-- Setup Google reCAPTCHA supported submit button -->
     <g-recaptcha-submit-button></g-recaptcha-submit-button>
 
 </form>
 
 ...
-<!-- Load Google ReCaptcha script -->
+<!-- Load Google reCAPTCHA script -->
 <g-recaptcha-script></g-recaptcha-script>
 ```
 
 ___
 
-## Usage In Action Methods - Verify ReCaptcha (MVC Only)
+## Usage In Action Methods - Verify reCAPTCHA (MVC Only)
 
 Inside your MVC controllers we can call to Google's reCAPTCHA API to verify its evaluation of your POST action methods via the `token` that is placed into the form. In the [example here](https://github.com/kef7/GoogleReCaptcha.Core/blob/ff576c554316747fa8dc6c9535d6fb7341f971f3/examples/GoogleReCaptcha.Examples.Mvc/Controllers/HomeController.cs#L25) we have a HomeController which accepts a POST at action method Index(model). We call the verify service like so:
 
@@ -223,14 +223,14 @@ ___
 
 ## reCAPTCHA v2 Widget
 
-To use Google's reCAPTCHA v2 widget version you will need to do the following:
+To use Google's reCAPTCHA v2 widget you will need to do the following:
 
 1. Add a call to `AddGoogleReCaptchaV2` in your Startup class' `ConfigureServices` method
 1. Configure v2 settings; similar to v3 but possibly under a `GoogleReCaptcha:V2` entry in your `appsettings.json` file. Note v2 settings are different then v3; it supports `Theme` and `Size`, but not `DefaultPassingScore`.
 1. Use the script tag helper, `</g-recaptcha-script>`, as normal
 1. Use the widget tag helper, `</g-recaptcha-widget>`, on your razor page where you wish the checkbox widget to be shown
 1. Apply a submit script/button as normal to submit your form
-1. (Optional) To use the ReCaptcha HTML Helpers you will need to (helpers example in example project @ ~/Views/HomeV2/Explicit.cshtml):
+1. (Optional) To use the HTML Helpers you will need to (helpers example in example project @ ~/Views/HomeV2/Explicit.cshtml):
     1. Add a call to `UseGoogleReCaptchaHtmlHelperSupport` in your Startup class' `Configure` method
     2. Add an a using for the `GoogleReCaptcha.Core.Mvc` namespace in a view that is on the path of your resulting razor page; possibly in `_ViewImports.cshtml` like: `@using GoogleReCaptcha.Core.Mvc`
 

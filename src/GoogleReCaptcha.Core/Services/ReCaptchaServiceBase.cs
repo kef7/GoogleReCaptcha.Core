@@ -1,169 +1,178 @@
-﻿using GoogleReCaptcha.Core.Services.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
-	public abstract class ReCaptchaServiceBase
-	{
-		#region Fields
+    using GoogleReCaptcha.Core.Services.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using Microsoft.Extensions.Logging;
+    using System.Text.Json;
 
-		/// <summary>
-		/// Google ReCaptcha post key; this is where google places the verify token
-		/// </summary>
-		public const string KEY_GOOGLE_RECAPTCHA_POST = "g-recaptcha-response";
+    /// <summary>
+    /// reCAPTCHA service base
+    /// </summary>
+    public abstract class ReCaptchaServiceBase
+    {
+        #region Fields
 
-		#endregion
+        /// <summary>
+        /// Google reCAPTCHA post key; this is where google places the verify token
+        /// </summary>
+        public const string KEY_GOOGLE_RECAPTCHA_POST = "g-recaptcha-response";
 
-		#region Properties
+        #endregion
 
-		/// <summary>
-		/// Gets the ILogger
-		/// </summary>
-		protected virtual ILogger Logger { get; }
+        #region Properties
 
-		/// <summary>
-		/// Get current action context
-		/// </summary>
-		protected virtual ActionContext ActionContext { get; set; }
+        /// <summary>
+        /// Gets the ILogger
+        /// </summary>
+        protected virtual ILogger Logger { get; }
 
-		/// <summary>
-		/// Get http client factory to spawn http clients
-		/// </summary>
-		protected virtual IHttpClientFactory HttpClientFactory { get; set; }
+        /// <summary>
+        /// Get current action context
+        /// </summary>
+        protected virtual ActionContext ActionContext { get; set; }
 
-		#endregion
+        /// <summary>
+        /// Get http client factory to spawn http clients
+        /// </summary>
+        protected virtual IHttpClientFactory HttpClientFactory { get; set; }
 
-		#region Constructor
+        #endregion
 
-		public ReCaptchaServiceBase(ILogger<ReCaptchaServiceBase> logger, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
-		{
-			if (actionContextAccessor == null)
-			{
-				throw new ArgumentNullException(nameof(actionContextAccessor));
-			}
+        #region Constructor
 
-			if (httpClientFactory == null)
-			{
-				throw new ArgumentNullException(nameof(httpClientFactory));
-			}
+        /// <summary>
+        /// reCAPTCHA service
+        /// </summary>
+        /// <param name="logger">Generic logger</param>
+        /// <param name="actionContextAccessor">Action context accessor</param>
+        /// <param name="httpClientFactory">HTTP client factory</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="actionContextAccessor"/> or <paramref name="httpClientFactory"/> is null</exception>
+        public ReCaptchaServiceBase(ILogger<ReCaptchaServiceBase> logger, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
+        {
+            if (actionContextAccessor == null)
+            {
+                throw new ArgumentNullException(nameof(actionContextAccessor));
+            }
 
-			if (logger == null)
-			{
-				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ReCaptchaServiceBase>();
-			}
-			Logger = logger;
+            if (httpClientFactory == null)
+            {
+                throw new ArgumentNullException(nameof(httpClientFactory));
+            }
 
-			ActionContext = actionContextAccessor?.ActionContext;
-			HttpClientFactory = httpClientFactory;
-		}
+            Logger = logger ?? new Microsoft.Extensions.Logging.Abstractions.NullLogger<ReCaptchaServiceBase>();;
 
-		#endregion
+            ActionContext = actionContextAccessor.ActionContext ?? throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
+            HttpClientFactory = httpClientFactory;
+        }
 
-		#region Methods
+        #endregion
 
-		/// <summary>
-		/// Get user IP or remote IP address from current action context
-		/// </summary>
-		/// <returns>User's IP or empty string if not found</returns>
-		protected virtual string GetUserIp()
-		{
-			if (ActionContext != null)
-			{
-				var userIp = ActionContext?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-				return userIp ?? "";
-			}
-			return "";
-		}
+        #region Methods
 
-		/// <summary>
-		/// Get Google ReCaptcha V2 verify token
-		/// </summary>
-		/// <returns>The verify token or an empty string if not found</returns>
-		public string GetToken()
-		{
-			if (ActionContext != null)
-			{
-				// Get token from request in form as Google states it should be if script is on site
-				var token = ActionContext?.HttpContext?.Request?.Form[KEY_GOOGLE_RECAPTCHA_POST];
-				return token?.ToString() ?? "";
-			}
-			return "";
-		}
+        /// <summary>
+        /// Get user IP or remote IP address from current action context
+        /// </summary>
+        /// <returns>User's IP or empty string if not found</returns>
+        protected virtual string GetUserIp()
+        {
+            if (ActionContext != null)
+            {
+                var userIp = ActionContext.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                return userIp ?? "";
+            }
+            return "";
+        }
 
-		/// <summary>
-		/// Buid request object with current settings and context
-		/// </summary>
-		/// <param name="token">User's verify token for request</param>
-		/// <returns>New request object with data from current settings and context</returns>
-		protected virtual VerifyRequest BuildRequestData(string secretKey, string token)
-		{
-			return new VerifyRequest
-			{
-				Secret = secretKey,
-				Response = token,
-				RemoteIp = GetUserIp()
-			};
-		}
+        /// <summary>
+        /// Get Google reCAPTCHA v2 verify token
+        /// </summary>
+        /// <returns>The verify token or an empty string if not found</returns>
+        public string GetToken()
+        {
+            if (ActionContext != null)
+            {
+                // Get token from request in form as Google states it should be if script is on site
+                var token = ActionContext.HttpContext?.Request?.Form[KEY_GOOGLE_RECAPTCHA_POST];
+                return token?.ToString() ?? "";
+            }
+            return "";
+        }
 
-		/// <summary>
-		/// Get verify response from API endpoint
-		/// </summary>
-		/// <param name="verifyRequestData">The verify response data to send to API endpoint</param>
-		/// <returns>Verify response object or null if nothing returned</returns>
-		protected virtual async Task<VerifyResponse> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
-		{
-			if (verifyRequestData == null)
-			{
-				throw new ArgumentNullException(nameof(verifyRequestData));
-			}
+        /// <summary>
+        /// Build request object with current settings and context
+        /// </summary>
+        /// <param name="secretKey">Secret key for request</param>
+        /// <param name="token">User's verify token for request</param>
+        /// <returns>New request object with data from current settings and context</returns>
+        protected virtual VerifyRequest BuildRequestData(string secretKey, string token)
+        {
+            return new VerifyRequest
+            {
+                Secret = secretKey,
+                Response = token,
+                RemoteIp = GetUserIp()
+            };
+        }
 
-			// Build post content
-			var formContent = new FormUrlEncodedContent(new[]
-			{
-				new KeyValuePair<string, string>("secret", verifyRequestData.Secret),
-				new KeyValuePair<string, string>("response", verifyRequestData.Response),
-				new KeyValuePair<string, string>("remoteip", verifyRequestData.RemoteIp)
-			});
+        /// <summary>
+        /// Get verify response from API endpoint
+        /// </summary>
+        /// <param name="verifyRequestData">The verify response data to send to API endpoint</param>
+        /// <returns>Verify response object or null if nothing returned</returns>
+        protected virtual async Task<VerifyResponse?> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
+        {
+            if (verifyRequestData == null)
+            {
+                throw new ArgumentNullException(nameof(verifyRequestData));
+            }
 
-			// Create new http client
-			var httpClient = HttpClientFactory.CreateClient(Constants.DEFAULT_HTTP_CLIENT_NAME);
+            // Build post content
+            var formContent = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("secret", verifyRequestData.Secret),
+                new KeyValuePair<string, string>("response", verifyRequestData.Response),
+                new KeyValuePair<string, string>("remoteip", verifyRequestData.RemoteIp)
+            });
 
-			// Get response
-			using var response = await httpClient.PostAsync("siteverify", formContent);
+            // Create new http client
+            var httpClient = HttpClientFactory.CreateClient(Constants.DEFAULT_HTTP_CLIENT_NAME);
 
-			// Parse response for data
-			if (response.IsSuccessStatusCode)
-			{
-				try
-				{
-					var jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
-					{
-						PropertyNameCaseInsensitive = false,
-						ReadCommentHandling = JsonCommentHandling.Skip,
-						WriteIndented = false
-					};
-					using var responseStream = await response.Content.ReadAsStreamAsync();
-					var verifyResponseData = await JsonSerializer.DeserializeAsync<VerifyResponse>(responseStream, jsonSerializerOptions);
-					return verifyResponseData;
-				}
-				catch (Exception ex)
-				{
-					Logger.LogError(ex, "Error in attempt to parse verify response from reCAPTCHA");
-					throw new ReCaptchaServiceException("Could not parse verify response object. See inner exception for details.", ex);
-				}
-			}
+            // Get response
+            using var response = await httpClient.PostAsync("siteverify", formContent);
 
-			return null;
-		}
+            // Parse response for data
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    // Init serialize options
+                    var jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                    {
+                        PropertyNameCaseInsensitive = false,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        WriteIndented = false
+                    };
 
-		#endregion
-	}
+                    // Read response
+                    using var responseStream = await response.Content.ReadAsStreamAsync();
+
+                    // Deserialize response into object
+                    var verifyResponseData = await JsonSerializer.DeserializeAsync<VerifyResponse>(responseStream, jsonSerializerOptions);
+
+                    // Return response objcect
+                    return verifyResponseData;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Error in attempt to parse verify response from reCAPTCHA");
+                    throw new ReCaptchaServiceException("Could not parse verify response object. See inner exception for details.", ex);
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+    }
 }

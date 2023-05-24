@@ -1,17 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public class ReCaptchaV2Settings : IReCaptchaV2Settings
-	{
-		public bool Enabled { get; set; } = true;
-		public string LibUrl { get; set; }
-		public string ApiUrl { get; set; }
-		public string SiteKey { get; set; }
-		public string SecretKey { get; set; }
-		public V2Theme? Theme { get; set; }
-		public V2Size? Size { get; set; }
+    /// <summary>
+    /// reCAPTCHA v2 settings
+    /// </summary>
+    public class ReCaptchaV2Settings : IReCaptchaV2Settings
+    {
+        /// <inheritdoc />
+        public bool Enabled { get; set; } = true;
+
+        /// <inheritdoc />
+        public string LibUrl { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string ApiUrl { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string SiteKey { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string SecretKey { get; set; } = null!;
+
+        /// <inheritdoc />
+        public V2Theme? Theme { get; set; }
+
+        /// <inheritdoc />
+        public V2Size? Size { get; set; }
 	}
 }

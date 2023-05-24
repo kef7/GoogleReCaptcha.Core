@@ -1,58 +1,66 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Mvc.TagHelpers
+﻿namespace GoogleReCaptcha.Core.Mvc.TagHelpers
 {
-	public abstract class TagHelperBase : TagHelper
-	{
-		#region Properties
+    using Microsoft.AspNetCore.Razor.TagHelpers;
+    using Microsoft.Extensions.Logging;
 
-		/// <summary>
-		/// Gets the ILogger
-		/// </summary>
-		protected virtual ILogger Logger { get; }
+    /// <summary>
+    /// Tag helper base
+    /// </summary>
+    public abstract class TagHelperBase : TagHelper
+    {
+        #region Properties
 
-		#endregion
+        /// <summary>
+        /// Gets the ILogger
+        /// </summary>
+        protected virtual ILogger Logger { get; }
 
-		#region Constructor
+        #endregion
 
-		public TagHelperBase(ILogger logger)
-		{
-			if (logger == null)
-			{
-				logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<TagHelperBase>();
-			}
-			Logger = logger;
-		}
+        #region Constructor
 
-		#endregion
+        /// <summary>
+        /// Tag helper base
+        /// </summary>
+        /// <param name="logger">Logger</param>
+        public TagHelperBase(ILogger logger)
+        {
+            Logger = logger ?? new Microsoft.Extensions.Logging.Abstractions.NullLogger<TagHelperBase>(); ;
+        }
 
-		#region Methods
+        #endregion
 
-		/// <summary>
-		/// Get and merge class attributes presnt with default class attributes required for Google ReCaptcha
-		/// </summary>
-		/// <param name="context">Tag helper context of the tag being processed</param>
-		/// <returns>String of all classes from current tag context and default</returns>
-		protected string GetMergedClassAttributes(TagHelperContext context, string defaultClassAttrs)
-		{
-			Logger.LogTrace("Merging default and current context class attributes.");
-			var classes = defaultClassAttrs ?? "";
-			var classTagHelperAttr = context.AllAttributes["class"];
-			if (classTagHelperAttr != null)
-			{
-				var tmp = classTagHelperAttr.Value?.ToString();
-				if (!string.IsNullOrWhiteSpace(tmp))
-				{
-					classes = classes + " " + tmp;
-				}
-			}
-			return classes;
-		}
+        #region Methods
 
-		#endregion
-	}
+        /// <summary>
+        /// Get and merge CSS class attributes present with default class attributes required for Google reCAPTCHA
+        /// </summary>
+        /// <param name="context">Tag helper context of the tag being processed</param>
+        /// <param name="defaultClassAttrs">Default set of CSS classes separated by spaces</param>
+        /// <returns>String of all classes from current tag context and default</returns>
+        protected string GetMergedClassAttributes(TagHelperContext context, string defaultClassAttrs)
+        {
+            Logger.LogTrace("Merging default and current context class attributes.");
+
+            // Define classes
+            var classes = defaultClassAttrs ?? "";
+
+            // Get classes from current tag context
+            var classTagHelperAttr = context.AllAttributes["class"];
+            if (classTagHelperAttr != null)
+            {
+                // Concat classes
+                var tmp = classTagHelperAttr.Value?.ToString();
+                if (!string.IsNullOrWhiteSpace(tmp))
+                {
+                    classes = classes + " " + tmp;
+                }
+            }
+
+            // Return classes
+            return classes;
+        }
+
+        #endregion
+    }
 }

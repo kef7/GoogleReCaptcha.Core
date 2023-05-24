@@ -1,28 +1,46 @@
-﻿using System.ComponentModel;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
-	/// <summary>
-	/// Verify error codes that can be returned by Google's verify API endpoint
-	/// </summary>
-	public enum VerifyErrorCode
-	{
-		[Description("missing-input-secret")]
-		MissingInputSecret,
+    using System.ComponentModel;
 
-		[Description("invalid-input-secret")]
-		InvalidInputSecret,
+    /// <summary>
+    /// Verify error codes that can be returned by Google's reCAPTCHA verify API endpoint
+    /// </summary>
+    public enum VerifyErrorCode
+    {
+        /// <summary>
+        /// Missing input secret error
+        /// </summary>
+        [Description("missing-input-secret")]
+        MissingInputSecret,
 
-		[Description("missing-input-response")]
-		MissingInputResponse,
+        /// <summary>
+        /// Invalid input secret error
+        /// </summary>
+        [Description("invalid-input-secret")]
+        InvalidInputSecret,
 
-		[Description("invalid-input-response")]
-		InvalidInputResponse,
+        /// <summary>
+        /// Missing input response error
+        /// </summary>
+        [Description("missing-input-response")]
+        MissingInputResponse,
 
-		[Description("bad-request")]
-		BadRequest,
+        /// <summary>
+        /// Invalid input response error
+        /// </summary>
+        [Description("invalid-input-response")]
+        InvalidInputResponse,
 
-		[Description("timeout-or-duplicate")]
-		TimeoutOrDuplicate
-	}
+        /// <summary>
+        /// Bad request error
+        /// </summary>
+        [Description("bad-request")]
+        BadRequest,
+
+        /// <summary>
+        /// Timeout or duplicate submission error
+        /// </summary>
+        [Description("timeout-or-duplicate")]
+        TimeoutOrDuplicate
+    }
 }
