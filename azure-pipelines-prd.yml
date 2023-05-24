@@ -1,0 +1,75 @@
+# Build pipeline trigger
+trigger:
+  - master
+
+# Pool resources for build
+pool:
+  vmImage: ubuntu-latest
+
+# Variables for build and pack
+variables:
+  - group: "GoogleReCaptcha.Core__VarGroup"
+  - name: "buildConfiguration"
+    value: "Release"
+  - name: "projFilePath"
+    value: "src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj"
+
+# Init steps
+steps:
+  # Setup dotnet version
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      includePreviewVersions: false
+
+  # Restore dependancies
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet restore"
+    inputs:
+      command: restore
+
+  # Build lib
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet build"
+    inputs:
+      command: build
+      arguments: "--configuration $(buildConfiguration)"
+      projects: "src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj"
+
+  # Package lib
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet pack"
+    inputs:
+      command: pack
+      arguments: "--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
+      packagesToPack: "src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj"
+      nobuild: true
+      versioningScheme: off
+
+  # Publish to artifacts staging directory
+  - task: PublishPipelineArtifact@1
+    displayName: "publish to artifacts staging"
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)
+
+  # Push package to internal feed
+  - task: NuGetCommand@2
+    displayName: "nuget push internal feed"
+    inputs:
+      command: push
+      feedsToUse: select
+      packagesToPush: "$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.snupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg"
+      nuGetFeedType: internal
+      publishVstsFeed: "$(feedName)"
+      versioningScheme: off
+      allowPackageConflicts: true
+
+  # Push package to external feed
+  - task: NuGetCommand@2
+    displayName: "nuget push external feed"
+    inputs:
+      command: push
+      packagesToPush: "$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.snupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg"
+      nuGetFeedType: external
+      publishFeedCredentials: "$(nugetServiceConnectionName)"
+      versioningScheme: off
