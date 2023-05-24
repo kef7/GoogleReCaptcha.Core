@@ -165,13 +165,13 @@
         /// <summary>
         /// Add reCAPTCHA v2 services support
         /// </summary>
-        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="serviceCollection">Service collection to use to add support too</param>
         /// <param name="config">Current configuration</param>
         /// <param name="settingsKey">Settings configuration key where reCAPTCHA settings are in <paramref name="config"/></param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string? settingsKey = null)
+        public static void AddGoogleReCaptchaV2(this IServiceCollection serviceCollection, IConfiguration config, string? settingsKey = null)
         {
             if (config == null)
             {
@@ -184,18 +184,18 @@
             var settings = configSection.Get<ReCaptchaV2Settings>();
 
             // Add V3 services
-            AddV2BaseServices(@this, settings);
+            AddV2BaseServices(serviceCollection, settings);
         }
 
         /// <summary>
         /// Add reCAPTCHA v2 services support
         /// </summary>
-        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="serviceCollection">Service collection to use to add support too</param>
         /// <param name="getSettingsFunc">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsFunc)
+        public static void AddGoogleReCaptchaV2(this IServiceCollection serviceCollection, Func<IReCaptchaV2Settings> getSettingsFunc)
         {
             if (getSettingsFunc == null)
             {
@@ -207,7 +207,7 @@
                 ?? throw new InvalidOperationException($"Could not obtain settings when invoking function {nameof(getSettingsFunc)}");
 
             // Add V2 services
-            AddV2BaseServices(@this, settings);
+            AddV2BaseServices(serviceCollection, settings);
         }
 
         #endregion
@@ -325,13 +325,13 @@
         /// <summary>
         /// Add reCAPTCHA v3 services support
         /// </summary>
-        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="serviceCollection">Service collection to use to add support too</param>
         /// <param name="config">Current configuration</param>
         /// <param name="settingsKey">Settings configuration key where reCAPTCHA settings are in <paramref name="config"/></param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string? settingsKey = null)
+        public static void AddGoogleReCaptchaV3(this IServiceCollection serviceCollection, IConfiguration config, string? settingsKey = null)
         {
             if (config == null)
             {
@@ -344,18 +344,18 @@
             var settings = configSection.Get<ReCaptchaV3Settings>();
 
             // Add V3 services
-            AddV3BaseServices(@this, settings);
+            AddV3BaseServices(serviceCollection, settings);
         }
 
         /// <summary>
         /// Add reCAPTCHA v3 services support
         /// </summary>
-        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="serviceCollection">Service collection to use to add support too</param>
         /// <param name="getSettingsFunc">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsFunc)
+        public static void AddGoogleReCaptchaV3(this IServiceCollection serviceCollection, Func<IReCaptchaV3Settings> getSettingsFunc)
         {
             if (getSettingsFunc == null)
             {
@@ -367,7 +367,7 @@
                 ?? throw new InvalidOperationException($"Could not obtain settings when invoking function {nameof(getSettingsFunc)}");
 
             // Add V3 services
-            AddV3BaseServices(@this, settings);
+            AddV3BaseServices(serviceCollection, settings);
         }
 
         #endregion
