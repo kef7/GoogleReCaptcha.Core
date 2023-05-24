@@ -5,14 +5,14 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Service for Google ReCaptcha V2; can verify user token with Google if configured correctly
+    /// Service for Google reCAPTCHA v2; can verify user token with Google if configured correctly
     /// </summary>
     public class ReCaptchaV2Service : ReCaptchaServiceBase, IReCaptchaV2Service
     {
         #region Properties
 
         /// <summary>
-        /// Get ReCaptcha V2 settings
+        /// Get reCAPTCHA v2 settings
         /// </summary>
         protected virtual IReCaptchaV2Settings Settings { get; }
 
@@ -21,22 +21,17 @@
         #region Constructor 
 
         /// <summary>
-        /// ReCaptcha V2 service requires V2 settings and to be tied into the current action context to get the 
-        /// recaptcha token Google puts in the request
+        /// reCAPTCHA v2 service requires v2 settings and to be tied into the current action context to get the 
+        /// reCAPTCHA token Google puts in the request
         /// </summary>
         /// <param name="logger">Logger</param>
         /// <param name="actionContextAccessor">Current action context accessor</param>
-        /// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's ReCaptcha API</param>
-        /// <param name="settings">V2 settings</param>
+        /// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's reCAPTCHA API</param>
+        /// <param name="settings">v2 settings</param>
         public ReCaptchaV2Service(ILogger<ReCaptchaV2Service> logger, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory, IReCaptchaV2Settings settings)
             : base(logger, actionContextAccessor, httpClientFactory)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            Settings = settings;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings)); ;
         }
 
         #endregion
@@ -75,7 +70,7 @@
             var token = GetToken();
             if (token != "")
             {
-                // Get reqeust data
+                // Get request data
                 var req = BuildRequestData(Settings.SecretKey, token);
                 Logger.LogDebug("Verify reCAPTCHA request data: {req}", req);
 
@@ -94,7 +89,7 @@
 
                     if (res.Success == true)
                     {
-                        Logger.LogDebug("Verify reCAPTCHA successful");
+                        Logger.LogDebug("Verify ReCaptcha successful");
                         return true;
                     }
                     else

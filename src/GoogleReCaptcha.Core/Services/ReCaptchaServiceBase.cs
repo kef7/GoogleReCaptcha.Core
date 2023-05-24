@@ -6,12 +6,15 @@
     using Microsoft.Extensions.Logging;
     using System.Text.Json;
 
+    /// <summary>
+    /// reCAPTCHA service base
+    /// </summary>
     public abstract class ReCaptchaServiceBase
     {
         #region Fields
 
         /// <summary>
-        /// Google ReCaptcha post key; this is where google places the verify token
+        /// Google reCAPTCHA post key; this is where google places the verify token
         /// </summary>
         public const string KEY_GOOGLE_RECAPTCHA_POST = "g-recaptcha-response";
 
@@ -38,6 +41,13 @@
 
         #region Constructor
 
+        /// <summary>
+        /// reCAPTCHA service
+        /// </summary>
+        /// <param name="logger">Generic logger</param>
+        /// <param name="actionContextAccessor">Action context accessor</param>
+        /// <param name="httpClientFactory">HTTP client factory</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="actionContextAccessor"/> or <paramref name="httpClientFactory"/> is null</exception>
         public ReCaptchaServiceBase(ILogger<ReCaptchaServiceBase> logger, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory)
         {
             if (actionContextAccessor == null)
@@ -50,13 +60,9 @@
                 throw new ArgumentNullException(nameof(httpClientFactory));
             }
 
-            if (logger == null)
-            {
-                logger = new Microsoft.Extensions.Logging.Abstractions.NullLogger<ReCaptchaServiceBase>();
-            }
-            Logger = logger;
+            Logger = logger ?? new Microsoft.Extensions.Logging.Abstractions.NullLogger<ReCaptchaServiceBase>();;
 
-            ActionContext = actionContextAccessor?.ActionContext;
+            ActionContext = actionContextAccessor.ActionContext ?? throw new ArgumentNullException(nameof(actionContextAccessor.ActionContext));
             HttpClientFactory = httpClientFactory;
         }
 
@@ -72,14 +78,14 @@
         {
             if (ActionContext != null)
             {
-                var userIp = ActionContext?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                var userIp = ActionContext.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return userIp ?? "";
             }
             return "";
         }
 
         /// <summary>
-        /// Get Google ReCaptcha V2 verify token
+        /// Get Google reCAPTCHA v2 verify token
         /// </summary>
         /// <returns>The verify token or an empty string if not found</returns>
         public string GetToken()
@@ -87,15 +93,16 @@
             if (ActionContext != null)
             {
                 // Get token from request in form as Google states it should be if script is on site
-                var token = ActionContext?.HttpContext?.Request?.Form[KEY_GOOGLE_RECAPTCHA_POST];
+                var token = ActionContext.HttpContext?.Request?.Form[KEY_GOOGLE_RECAPTCHA_POST];
                 return token?.ToString() ?? "";
             }
             return "";
         }
 
         /// <summary>
-        /// Buid request object with current settings and context
+        /// Build request object with current settings and context
         /// </summary>
+        /// <param name="secretKey">Secret key for request</param>
         /// <param name="token">User's verify token for request</param>
         /// <returns>New request object with data from current settings and context</returns>
         protected virtual VerifyRequest BuildRequestData(string secretKey, string token)
@@ -113,7 +120,7 @@
         /// </summary>
         /// <param name="verifyRequestData">The verify response data to send to API endpoint</param>
         /// <returns>Verify response object or null if nothing returned</returns>
-        protected virtual async Task<VerifyResponse> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
+        protected virtual async Task<VerifyResponse?> GetVerifyResponseAsync(VerifyRequest verifyRequestData)
         {
             if (verifyRequestData == null)
             {
@@ -139,14 +146,21 @@
             {
                 try
                 {
+                    // Init serialize options
                     var jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
                     {
                         PropertyNameCaseInsensitive = false,
                         ReadCommentHandling = JsonCommentHandling.Skip,
                         WriteIndented = false
                     };
+
+                    // Read response
                     using var responseStream = await response.Content.ReadAsStreamAsync();
+
+                    // Deserialize response into object
                     var verifyResponseData = await JsonSerializer.DeserializeAsync<VerifyResponse>(responseStream, jsonSerializerOptions);
+
+                    // Return response objcect
                     return verifyResponseData;
                 }
                 catch (Exception ex)

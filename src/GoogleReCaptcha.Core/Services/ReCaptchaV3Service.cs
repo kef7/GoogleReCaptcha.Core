@@ -5,14 +5,14 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Service for Google ReCaptcha V3; can verify user token with Google if configured correctly
+    /// Service for Google reCAPTCHA v3; can verify user token with Google if configured correctly
     /// </summary>
     public class ReCaptchaV3Service : ReCaptchaServiceBase, IReCaptchaV3Service
     {
         #region Properties
 
         /// <summary>
-        /// Get ReCaptcha V3 settings
+        /// Get reCAPTCHA v3 settings
         /// </summary>
         protected virtual IReCaptchaV3Settings Settings { get; }
 
@@ -21,22 +21,18 @@
         #region Constructor 
 
         /// <summary>
-        /// ReCaptcha V3 service requires V3 settings and to be tied into the current action context to get the 
-        /// recaptcha token Google puts in the request
+        /// reCAPTCHA v3 service requires v3 settings and to be tied into the current action context to get the 
+        /// reCAPTCHA token Google puts in the request
         /// </summary>
-        /// <param name="settings">ReCaptcah V3 settings</param>
+        /// <param name="logger">Generic logger</param>
         /// <param name="actionContextAccessor">Current action context accessor</param>
-        /// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's ReCaptcha API</param>
+        /// <param name="httpClientFactory">HTTP Client factory to send assist in sending verify request to Google's reCAPTCHA API</param>
         /// <param name="settings">V3 settings</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="settings"/> is null</exception>
         public ReCaptchaV3Service(ILogger<ReCaptchaV3Service> logger, IActionContextAccessor actionContextAccessor, IHttpClientFactory httpClientFactory, IReCaptchaV3Settings settings)
             : base(logger, actionContextAccessor, httpClientFactory)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            Settings = settings;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));;
         }
 
         #endregion
