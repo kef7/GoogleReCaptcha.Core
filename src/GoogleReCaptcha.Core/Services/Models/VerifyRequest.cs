@@ -13,7 +13,7 @@
 		public string Secret { get; set; }
 
 		/// <summary>
-		/// The user's reponse token provided by the ReCaptcha client-side integration on your site
+		/// The user's response token provided by the ReCaptcha client-side integration on your site
 		/// </summary>
 		public string Response { get; set; }
 
