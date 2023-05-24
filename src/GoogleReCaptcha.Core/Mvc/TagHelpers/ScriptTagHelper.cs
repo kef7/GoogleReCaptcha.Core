@@ -15,11 +15,29 @@
     {
         #region Static &| Consts
 
+        /// <summary>
+        /// Script tag
+        /// </summary>
         public const string TAG = TagHelperConstants.TAG_PREFIX + "-script";
 
+        /// <summary>
+        /// From settings attribute name
+        /// </summary>
         public const string ATTR_FROMSETTINGS = TagHelperConstants.ATTRIBUTE_PREFIX + "-from-settings";
+
+        /// <summary>
+        /// Lib URL attribute name
+        /// </summary>
         public const string ATTR_LIBURL = TagHelperConstants.ATTRIBUTE_PREFIX + "-liburl";
+
+        /// <summary>
+        /// Explicit attribute name
+        /// </summary>
         public const string ATTR_USE_EXPLICIT_DEFAULT = TagHelperConstants.ATTRIBUTE_PREFIX + "-explicit";
+
+        /// <summary>
+        /// Explicit callback attribute name
+        /// </summary>
         public const string ATTR_SET_EXPLICIT_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-explicit-cb";
 
         #endregion
@@ -68,28 +86,32 @@
 
         #region Constructor
 
+        /// <summary>
+        /// ReCaptcha script tag helper
+        /// </summary>
+        /// <param name="logger">Generic logger</param>
+        /// <param name="settings">Settings object</param>
+        /// <param name="urlHelper">URL helper reference</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="settings"/> or <paramref name="urlHelper"/> is null</exception>
         public ScriptTagHelper(ILogger<ScriptTagHelper> logger, IReCaptchaSettings settings, IUrlHelper urlHelper)
             : base(logger)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            if (urlHelper == null)
-            {
-                throw new ArgumentNullException(nameof(urlHelper));
-            }
-
-            Settings = settings;
-            UrlHelper = urlHelper;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));;
+            UrlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));;
         }
 
         #endregion
 
         #region TagHelper Overridden Methods
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (context == null)
             {
@@ -135,7 +157,7 @@
                 if (src != null)
                 {
                     Logger.LogTrace("Set lib url from src");
-                    LibUrl = src.Value?.ToString();
+                    LibUrl = src.Value as string ?? "";
                 }
 
                 // If null set to default known Google JS lib URL
@@ -156,12 +178,12 @@
             // Set explicit call-back script function in URL
             if (!string.IsNullOrWhiteSpace(ExplicitCallBack))
             {
-                Logger.LogTrace("Set expicit callback using provided");
+                Logger.LogTrace("Set explicit callback using provided");
                 LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, ExplicitCallBack);
             }
             else if (UseExplicitDefault)
             {
-                Logger.LogTrace("Set expicit callback using default");
+                Logger.LogTrace("Set explicit callback using default");
                 LibUrl = RebuildUrlUsingExplicitCallBackQuery(LibUrl, "onloadCallback");
             }
 
@@ -180,10 +202,29 @@
             output.Attributes.SetAttribute(deferTagAttr);
         }
 
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            await Task.Run(() => Process(context, output));
+        }
+
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Rebuild URL using explicit callback query
+        /// </summary>
+        /// <param name="url">Script URL</param>
+        /// <param name="callBackFnName">Callback function name to call after load</param>
+        /// <returns>Script URL with callback if provided</returns>
+        /// <exception cref="ArgumentException"></exception>
         private string RebuildUrlUsingExplicitCallBackQuery(string url, string callBackFnName)
         {
             if (string.IsNullOrWhiteSpace(url))

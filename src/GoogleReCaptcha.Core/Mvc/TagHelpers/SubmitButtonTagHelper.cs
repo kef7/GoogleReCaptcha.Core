@@ -19,13 +19,34 @@
     {
         #region Static &| Consts
 
+        /// <summary>
+        /// Submit button tag
+        /// </summary>
         public const string TAG = TagHelperConstants.TAG_PREFIX + "-submit-button";
 
+        /// <summary>
+        /// From settings attribute name
+        /// </summary>
         public const string ATTR_FROMSETTINGS = TagHelperConstants.ATTRIBUTE_PREFIX + "-from-settings";
+
+        /// <summary>
+        /// Action attribute name
+        /// </summary>
         public const string ATTR_ACTION = TagHelperConstants.ATTRIBUTE_PREFIX + "-action";
+
+        /// <summary>
+        /// Callback attribute name
+        /// </summary>
         public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-callback";
+
+        /// <summary>
+        /// Sitekey attribute name
+        /// </summary>
         public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 
+        /// <summary>
+        /// Default classes list to apply to class attribute in tag named after <see cref="TAG"/>
+        /// </summary>
         public const string DEFAULT_CLASSES = "g-recaptcha";
 
         #endregion
@@ -85,22 +106,30 @@
 
         #region Constructor
 
+        /// <summary>
+        /// ReCaptcha submit button tag helper
+        /// </summary>
+        /// <param name="logger">Generic logger</param>
+        /// <param name="settings">Settings object</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="settings"/> is null</exception>
         public SubmitButtonTagHelper(ILogger<SubmitButtonTagHelper> logger, IReCaptchaSettings settings)
             : base(logger)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            Settings = settings;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         #endregion
 
         #region TagHelper Overridden Methods
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (context == null)
             {
@@ -169,6 +198,18 @@
                 Logger.LogDebug("Button type not defined, setting to {ButtonType}", btnType);
                 output.Attributes.SetAttribute("type", btnType);
             }
+        }
+
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            await Task.Run(() => Process(context, output));
         }
 
         #endregion

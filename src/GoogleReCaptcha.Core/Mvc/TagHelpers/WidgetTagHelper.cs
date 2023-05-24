@@ -18,16 +18,49 @@
     {
         #region Static &| Consts
 
+        /// <summary>
+        /// Widget tag
+        /// </summary>
         public const string TAG = TagHelperConstants.TAG_PREFIX + "-widget";
 
+        /// <summary>
+        /// Sitekey attribute name
+        /// </summary>
         public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
+
+        /// <summary>
+        /// Theme attribute name
+        /// </summary>
         public const string ATTR_THEME = TagHelperConstants.ATTRIBUTE_PREFIX + "-theme";
+
+        /// <summary>
+        /// Size attribute name
+        /// </summary>
         public const string ATTR_SIZE = TagHelperConstants.ATTRIBUTE_PREFIX + "-size";
+
+        /// <summary>
+        /// Tab index attribute name
+        /// </summary>
         public const string ATTR_TAB_INDEX = TagHelperConstants.ATTRIBUTE_PREFIX + "-tabindex";
+
+        /// <summary>
+        /// Callback attribute name
+        /// </summary>
         public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-cb";
+
+        /// <summary>
+        /// Exp callback attribute name
+        /// </summary>
         public const string ATTR_EXP_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-exp-cb";
+
+        /// <summary>
+        /// Error callback attribute name
+        /// </summary>
         public const string ATTR_ERR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-err-cb";
 
+        /// <summary>
+        /// Default ReCaptcha classes
+        /// </summary>
         public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
 
         #endregion
@@ -96,22 +129,30 @@
 
         #region Constructor
 
+        /// <summary>
+        /// Widget tag helper
+        /// </summary>
+        /// <param name="logger">Generic logger</param>
+        /// <param name="settings">Settings object</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="settings"/> is null</exception>
         public WidgetTagHelper(ILogger<WidgetTagHelper> logger, IReCaptchaV2Settings settings)
             : base(logger)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            Settings = settings;
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));;
         }
 
         #endregion
 
         #region TagHelper Overridden Methods
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (context == null)
             {
@@ -217,6 +258,18 @@
             Logger.LogTrace("Merge and set class attributes");
             var classes = GetMergedClassAttributes(context, DEFAULT_CLASS_ATTRS);
             output.Attributes.SetAttribute("class", classes);
+        }
+
+        /// <summary>
+        /// Process tag
+        /// </summary>
+        /// <param name="context">Tag helper context</param>
+        /// <param name="output">Tag helper output object</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> or <paramref name="output"/> is null</exception>
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            await Task.Run(() => Process(context, output));
         }
 
         #endregion
