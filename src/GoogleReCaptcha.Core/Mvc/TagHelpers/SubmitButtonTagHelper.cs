@@ -40,7 +40,7 @@
         public const string ATTR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-callback";
 
         /// <summary>
-        /// Sitekey attribute name
+        /// Site key attribute name
         /// </summary>
         public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 

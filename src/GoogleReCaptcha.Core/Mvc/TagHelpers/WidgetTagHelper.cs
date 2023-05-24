@@ -24,7 +24,7 @@
         public const string TAG = TagHelperConstants.TAG_PREFIX + "-widget";
 
         /// <summary>
-        /// Sitekey attribute name
+        /// Site key attribute name
         /// </summary>
         public const string ATTR_SITEKEY = TagHelperConstants.ATTRIBUTE_PREFIX + "-sitekey";
 
@@ -179,7 +179,7 @@
 
             Logger.LogTrace("Prepare output for reCAPTCHA widget div tag");
 
-            // Apply sitekey setting to props
+            // Apply site key setting to props
             if (!string.IsNullOrWhiteSpace(Settings.SiteKey))
             {
                 Logger.LogTrace("Get SiteKey from settings");
