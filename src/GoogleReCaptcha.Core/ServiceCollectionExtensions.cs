@@ -191,19 +191,20 @@
         /// Add reCAPTCHA v2 services support
         /// </summary>
         /// <param name="this">Service collection to use to add support too</param>
-        /// <param name="getSettingsAction">Function called that will return reCAPTCHA settings to use</param>
+        /// <param name="getSettingsFunc">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsAction)
+        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, Func<IReCaptchaV2Settings> getSettingsFunc)
         {
-            if (getSettingsAction == null)
+            if (getSettingsFunc == null)
             {
-                throw new ArgumentNullException(nameof(getSettingsAction));
+                throw new ArgumentNullException(nameof(getSettingsFunc));
             }
 
             // Get V2 settings from func
-            var settings = getSettingsAction() as ReCaptchaV2Settings;
+            var settings = getSettingsFunc() as ReCaptchaV2Settings
+                ?? throw new InvalidOperationException($"Could not obtain settings when invoking function {nameof(getSettingsFunc)}");
 
             // Add V2 services
             AddV2BaseServices(@this, settings);
@@ -350,19 +351,20 @@
         /// Add reCAPTCHA v3 services support
         /// </summary>
         /// <param name="this">Service collection to use to add support too</param>
-        /// <param name="getSettingsAction">Function called that will return reCAPTCHA settings to use</param>
+        /// <param name="getSettingsFunc">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsAction)
+        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, Func<IReCaptchaV3Settings> getSettingsFunc)
         {
-            if (getSettingsAction == null)
+            if (getSettingsFunc == null)
             {
-                throw new ArgumentNullException(nameof(getSettingsAction));
+                throw new ArgumentNullException(nameof(getSettingsFunc));
             }
 
             // Get V3 settings from func
-            var settings = getSettingsAction() as ReCaptchaV3Settings;
+            var settings = getSettingsFunc() as ReCaptchaV3Settings
+                ?? throw new InvalidOperationException($"Could not obtain settings when invoking function {nameof(getSettingsFunc)}");
 
             // Add V3 services
             AddV3BaseServices(@this, settings);
