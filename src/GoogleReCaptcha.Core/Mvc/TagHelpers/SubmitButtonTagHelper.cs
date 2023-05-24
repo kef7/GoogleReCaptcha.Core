@@ -10,7 +10,7 @@
     /// Tag helper to assist in adding Google reCAPTCHA v2/v3 data attributes from settings configured in appsettings.json into a submit button
     /// </summary>
     /// <remarks>
-    /// Use this with invisible captcha for v2 or v3.
+    /// Use this with invisible reCAPTCHA for v2 or v3.
     /// </remarks>
     [HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
     [HtmlTargetElement("button", Attributes = ATTR_FROMSETTINGS, TagStructure = TagStructure.NormalOrSelfClosing)] // Just to get it to call
