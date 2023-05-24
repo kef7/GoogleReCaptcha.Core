@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\readme.md" Pack="true" PackagePath="$(PackageReadmeFile)">
+		<None Include="..\..\readme.md" Pack="true" PackagePath="$(PackageReadmeFile)">
 			<Visible>false</Visible>
 		</None>
 	</ItemGroup>
