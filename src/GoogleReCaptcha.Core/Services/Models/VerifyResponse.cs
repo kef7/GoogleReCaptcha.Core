@@ -20,7 +20,7 @@
         /// <summary>
         /// The action name for the request
         /// </summary>
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
         /// <summary>
         /// Challenge timestamp
@@ -31,7 +31,7 @@
         /// <summary>
         /// Hostname of the site where the reCAPTCHA was solved
         /// </summary>
-        public string Hostname { get; set; }
+        public string? Hostname { get; set; }
 
         /// <summary>
         /// Android APK package name where the reCAPTCHA was solved; optional or N/A unless in APK (Xamarin/MAUI maybe)
@@ -43,6 +43,6 @@
         /// List of error codes during verify process; optional
         /// </summary>
         [JsonPropertyName("error-codes")]
-        public string[] ErrorCodes { get; set; }
+        public string?[]? ErrorCodes { get; set; } = null;
     }
 }

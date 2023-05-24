@@ -51,7 +51,7 @@
                 {
                     var actionContext = serviceProvider.GetRequiredService<IActionContextAccessor>().ActionContext;
                     var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
-                    return factory.GetUrlHelper(actionContext);
+                    return factory.GetUrlHelper(actionContext!);
                 });
 
                 // Add IHttpClientFactory for ID
@@ -171,7 +171,7 @@
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
+        public static void AddGoogleReCaptchaV2(this IServiceCollection @this, IConfiguration config, string? settingsKey = null)
         {
             if (config == null)
             {
@@ -330,7 +330,7 @@
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
-        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string settingsKey = null)
+        public static void AddGoogleReCaptchaV3(this IServiceCollection @this, IConfiguration config, string? settingsKey = null)
         {
             if (config == null)
             {

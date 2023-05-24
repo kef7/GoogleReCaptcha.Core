@@ -21,7 +21,7 @@
         /// <summary>
         /// Verify response from reCAPTCHA
         /// </summary>
-        public VerifyResponse Response { get; private set; } = null;
+        public VerifyResponse? Response { get; private set; } = null;
 
         #endregion
 
