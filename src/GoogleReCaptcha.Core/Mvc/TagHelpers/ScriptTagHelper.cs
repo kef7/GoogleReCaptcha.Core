@@ -149,7 +149,7 @@
             if (string.IsNullOrWhiteSpace(LibUrl))
             {
                 // Set to null
-                LibUrl = null;
+                LibUrl = null!;
 
                 // Pull from src
                 Logger.LogTrace("Get lib url already present in tag src");

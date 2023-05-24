@@ -9,16 +9,16 @@
         public bool Enabled { get; set; } = true;
 
         /// <inheritdoc />
-        public string LibUrl { get; set; }
+        public string LibUrl { get; set; } = null!;
 
         /// <inheritdoc />
-        public string ApiUrl { get; set; }
+        public string ApiUrl { get; set; } = null!;
 
         /// <inheritdoc />
-        public string SiteKey { get; set; }
+        public string SiteKey { get; set; } = null!;
 
         /// <inheritdoc />
-        public string SecretKey { get; set; }
+        public string SecretKey { get; set; } = null!;
 
         /// <inheritdoc />
         public V2Theme? Theme { get; set; }
