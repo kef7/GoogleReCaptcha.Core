@@ -16,6 +16,9 @@
     {
         #region Static Fields
 
+        /// <summary>
+        /// Static flag to indicate that shared previous services method as been called
+        /// </summary>
         private static bool s_sharedPrevCalled = false;
 
         #endregion

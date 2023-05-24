@@ -9,15 +9,34 @@
     /// </summary>
     public class ReCaptchaSettingsHttpContextItemsInjectionMiddleware
     {
+        /// <summary>
+        /// Request delegate to call next
+        /// </summary>
         private readonly RequestDelegate _next;
+
+        /// <summary>
+        /// Logger factory
+        /// </summary>
         private readonly ILoggerFactory _loggerFactory;
 
+        /// <summary>
+        /// Inject limited reCAPTCHA settings data into <see cref="HttpContext.Items"/>
+        /// </summary>
+        /// <param name="next">Next request delegate to call</param>
+        /// <param name="loggerFactory">Logger factory</param>
         public ReCaptchaSettingsHttpContextItemsInjectionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _next = next;
             _loggerFactory = loggerFactory;
         }
 
+        /// <summary>
+        /// Invoke middleware
+        /// </summary>
+        /// <param name="context">HTTP context</param>
+        /// <param name="reCaptchaV2Settings">reCAPTCHA v2 settings object</param>
+        /// <param name="reCaptchaV3Settings">reCAPTCHA v3 settings object</param>
+        /// <returns></returns>
         public async Task InvokeAsync(
             HttpContext context,
             IReCaptchaV2Settings reCaptchaV2Settings,
@@ -34,7 +53,7 @@
         }
 
         /// <summary>
-        /// Inject V2 settings into context
+        /// Inject reCAPTCHA v2 settings into context
         /// </summary>
         /// <param name="logger">ILogger to log progress/issues</param>
         /// <param name="context">HttpContext to inject settings into</param>
@@ -58,7 +77,7 @@
         }
 
         /// <summary>
-        /// Inject V3 settings into conetxt
+        /// Inject reCAPTCHA v3 settings into context
         /// </summary>
         /// <param name="logger">ILogger to log progress/issues</param>
         /// <param name="context">HttpContext to inject settings into</param>

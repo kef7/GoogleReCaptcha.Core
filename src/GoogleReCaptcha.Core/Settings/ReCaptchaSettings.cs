@@ -1,11 +1,23 @@
 ﻿namespace GoogleReCaptcha.Core.Settings
 {
+    /// <summary>
+    /// reCAPTCHA settings
+    /// </summary>
     public class ReCaptchaSettings : IReCaptchaSettings
 	{
+		/// <inheritdoc />
 		public bool Enabled { get; set; } = true;
-		public string LibUrl { get; set; }
-		public string ApiUrl { get; set; }
-		public string SiteKey { get; set; }
-		public string SecretKey { get; set; }
+
+        /// <inheritdoc />
+        public string LibUrl { get; set; }
+
+        /// <inheritdoc />
+        public string ApiUrl { get; set; }
+
+        /// <inheritdoc />
+        public string SiteKey { get; set; }
+
+        /// <inheritdoc />
+        public string SecretKey { get; set; }
 	}
 }
