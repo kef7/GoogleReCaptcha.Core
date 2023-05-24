@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public class ReCaptchaSettings : IReCaptchaSettings
+    /// <summary>
+    /// reCAPTCHA settings
+    /// </summary>
+    public class ReCaptchaSettings : IReCaptchaSettings
 	{
+		/// <inheritdoc />
 		public bool Enabled { get; set; } = true;
-		public string LibUrl { get; set; }
-		public string ApiUrl { get; set; }
-		public string SiteKey { get; set; }
-		public string SecretKey { get; set; }
-	}
+
+        /// <inheritdoc />
+        public string LibUrl { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string ApiUrl { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string SiteKey { get; set; } = null!;
+
+        /// <inheritdoc />
+        public string SecretKey { get; set; } = null!;
+    }
 }

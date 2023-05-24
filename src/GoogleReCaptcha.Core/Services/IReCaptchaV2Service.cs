@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Services
+﻿namespace GoogleReCaptcha.Core.Services
 {
-	public interface IReCaptchaV2Service : IReCaptchaService
+	/// <summary>
+	/// reCAPTCHA v2 interface
+	/// </summary>
+    public interface IReCaptchaV2Service : IReCaptchaService
 	{
 	}
 }

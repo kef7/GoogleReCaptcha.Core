@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public enum V2Theme
+    /// <summary>
+    /// reCAPTCHA v2 supported themes
+    /// </summary>
+    public enum V2Theme
 	{
+        /// <summary>
+        /// reCAPTCHA v2 light theme
+        /// </summary>
 		Light,
+
+        /// <summary>
+        /// reCAPTCHA v2 dark theme
+        /// </summary>
 		Dark
 	}
 }

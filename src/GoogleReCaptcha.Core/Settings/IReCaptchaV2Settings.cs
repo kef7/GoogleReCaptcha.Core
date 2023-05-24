@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleReCaptcha.Core.Settings
+﻿namespace GoogleReCaptcha.Core.Settings
 {
-	public interface IReCaptchaV2Settings : IReCaptchaSettings
+    /// <summary>
+    /// reCAPTCHA v2 settings interface
+    /// </summary>
+    public interface IReCaptchaV2Settings : IReCaptchaSettings
 	{
+        /// <summary>
+        /// reCAPTCHA v2 theme
+        /// </summary>
 		V2Theme? Theme { get; }
+
+        /// <summary>
+        /// reCAPTCHA v2 size
+        /// </summary>
 		V2Size? Size { get; }
 	}
 }
