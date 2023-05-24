@@ -11,7 +11,7 @@
     /// </summary>
     /// <remarks>
     /// Used in v2 implementation where the widget is required; not used in invisible variant.
-    /// Use <see cref="SubmitdivTagHelper"/> for v2 invisible variant.
+    /// Use <see cref="SubmitButtonTagHelper"/> for v2 invisible variant.
     /// </remarks>
     [HtmlTargetElement(TAG, TagStructure = TagStructure.NormalOrSelfClosing)]
     public class WidgetTagHelper : TagHelperBase
