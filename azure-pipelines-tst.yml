@@ -14,7 +14,6 @@ variables:
   - name: "projFilePath"
     value: "src/GoogleReCaptcha.Core/GoogleReCaptcha.Core.csproj"
 
-
 # Init steps
 steps:
   # Setup dotnet version
