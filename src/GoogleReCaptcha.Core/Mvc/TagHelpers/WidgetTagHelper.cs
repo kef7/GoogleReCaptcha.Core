@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Tag helper to assist in adding Google ReCaptcah v2 data attributes from settings configured in appsettings.json into the v2 widget
+    /// Tag helper to assist in adding Google reCAPTCHA v2 data attributes from settings configured in appsettings.json into the v2 widget
     /// </summary>
     /// <remarks>
     /// Used in v2 implementation where the widget is required; not used in invisible variant.
@@ -59,7 +59,7 @@
         public const string ATTR_ERR_CALLBACK = TagHelperConstants.ATTRIBUTE_PREFIX + "-err-cb";
 
         /// <summary>
-        /// Default ReCaptcha classes
+        /// Default reCAPTCHA classes
         /// </summary>
         public const string DEFAULT_CLASS_ATTRS = "g-recaptcha";
 
@@ -72,7 +72,7 @@
         #region Properties
 
         /// <summary>
-        /// Gets the recaptcha settings to use for this tag's output
+        /// Gets the reCAPTCHA settings to use for this tag's output
         /// </summary>
         protected IReCaptchaV2Settings Settings { get; }
 
@@ -169,7 +169,7 @@
             // Enabled?
             if (!Settings.Enabled)
             {
-                // Setup tag as non-recaptcha supported div
+                // Setup tag as non-reCAPTCHA supported div
                 output.TagName = "div";
                 Logger.LogTrace("Suppress reCAPTCHA version of widget div tag");
 

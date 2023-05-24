@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     /// <summary>
-    /// HtmlHelper extensions for ReCaptcha settings
+    /// HtmlHelper extensions for reCAPTCHA settings
     /// </summary>
     /// <remarks>
     /// Requires use of middleware <see cref="ReCaptchaSettingsHttpContextItemsInjectionMiddleware"/>

@@ -7,7 +7,7 @@
 		<PackageId>GoogleReCaptcha.Core</PackageId>
 		<Version>1.0.1</Version>
 		<Authors>kef7</Authors>
-		<Description>Google ReCaptcha support for ASP.NET Core MVC</Description>
+		<Description>Google reCAPTCHA support for ASP.NET Core MVC</Description>
 		<IsPackable>true</IsPackable>
 		<RepositoryUrl>https://github.com/kef7/GoogleReCaptcha.Core</RepositoryUrl>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>

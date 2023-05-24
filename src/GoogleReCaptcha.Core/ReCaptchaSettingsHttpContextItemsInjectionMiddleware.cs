@@ -5,7 +5,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Inject limited ReCaptcha settings data into <see cref="HttpContext.Items"/>
+    /// Inject limited reCAPTCHA settings data into <see cref="HttpContext.Items"/>
     /// </summary>
     public class ReCaptchaSettingsHttpContextItemsInjectionMiddleware
     {
@@ -34,7 +34,7 @@
         }
 
         /// <summary>
-        /// Inject V2 settings into conetxt
+        /// Inject V2 settings into context
         /// </summary>
         /// <param name="logger">ILogger to log progress/issues</param>
         /// <param name="context">HttpContext to inject settings into</param>
@@ -45,7 +45,7 @@
             {
                 if (settings != null)
                 {
-                    logger.LogDebug("Attempting to inject limited ReCaptcha V2 settings into HttpContext Items collection.");
+                    logger.LogDebug("Attempting to inject limited reCAPTCHA v2 settings into HttpContext Items collection.");
                     context.Items[Constants.HTTPCTX_KEY_V2_SITEKEY] = settings.SiteKey;
                     context.Items[Constants.HTTPCTX_KEY_V2_THEME] = settings.Theme;
                     context.Items[Constants.HTTPCTX_KEY_V2_SIZE] = settings.Size;
@@ -53,7 +53,7 @@
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Error in attempt to inject limited ReCaptcha V2 settings to HttpContext Items collection.");
+                logger.LogWarning(ex, "Error in attempt to inject limited reCAPTCHA v2 settings to HttpContext Items collection.");
             }
         }
 
@@ -69,13 +69,13 @@
             {
                 if (settings != null)
                 {
-                    logger.LogDebug("Attempting to inject limited ReCaptcha V3 settings into HttpContext Items collection.");
+                    logger.LogDebug("Attempting to inject limited reCAPTCHA v3 settings into HttpContext Items collection.");
                     context.Items[Constants.HTTPCTX_KEY_V3_SITEKEY] = settings.SiteKey;
                 }
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Error in attempt to inject limited ReCaptcah V3 settings to HttpContext Items collection.");
+                logger.LogWarning(ex, "Error in attempt to inject limited reCAPTCHA v3 settings to HttpContext Items collection.");
             }
         }
     }

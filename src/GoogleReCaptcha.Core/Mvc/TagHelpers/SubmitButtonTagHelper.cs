@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Tag helper to assist in adding Google ReCaptcah v2/v3 data attributes from settings configured in appsettings.json into a submit button
+    /// Tag helper to assist in adding Google reCAPTCHA v2/v3 data attributes from settings configured in appsettings.json into a submit button
     /// </summary>
     /// <remarks>
     /// Use this with invisible captcha for v2 or v3.
@@ -58,7 +58,7 @@
         #region Properties
 
         /// <summary>
-        /// Gets the recaptcha settings to use for this tag's output
+        /// Gets the reCAPTCHA settings to use for this tag's output
         /// </summary>
         protected IReCaptchaSettings Settings { get; }
 
@@ -107,7 +107,7 @@
         #region Constructor
 
         /// <summary>
-        /// ReCaptcha submit button tag helper
+        /// reCAPTCHA submit button tag helper
         /// </summary>
         /// <param name="logger">Generic logger</param>
         /// <param name="settings">Settings object</param>
@@ -146,7 +146,7 @@
             // Enabled?
             if (!Settings.Enabled)
             {
-                // Setup tag as non-recaptcha supported button
+                // Setup tag as non-reCAPTCHA supported button
                 output.TagName = "button";
                 Logger.LogTrace("Suppress reCAPTCHA version of button tag");
 

@@ -89,7 +89,7 @@
 
                     if (res.Success == true)
                     {
-                        Logger.LogDebug("Verify ReCaptcha successful");
+                        Logger.LogDebug("Verify reCAPTCHA successful");
                         return true;
                     }
                     else

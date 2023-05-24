@@ -3,12 +3,12 @@
     using System.Text.Json.Serialization;
 
     /// <summary>
-    /// Model of Google's ReCaptcha verify response
+    /// Model of Google's reCAPTCHA verify response
     /// </summary>
     public class VerifyResponse
     {
         /// <summary>
-        /// Whether the request was a valid ReCaptcha token
+        /// Whether the request was a valid reCAPTCHA token
         /// </summary>
         public bool Success { get; set; }
 
@@ -29,12 +29,12 @@
         public DateTime? ChallengeTs { get; set; }
 
         /// <summary>
-        /// Hostname of the site where the ReCaptcha was solved
+        /// Hostname of the site where the reCAPTCHA was solved
         /// </summary>
         public string Hostname { get; set; }
 
         /// <summary>
-        /// Android APK package name where the ReCaptcha was solved; optional or N/A unless in APK (Xamarin/MAUI maybe)
+        /// Android APK package name where the reCAPTCHA was solved; optional or N/A unless in APK (Xamarin/MAUI maybe)
         /// </summary>
         [JsonPropertyName("apk_package_name")]
         public string? ApkPackageName { get; set; }

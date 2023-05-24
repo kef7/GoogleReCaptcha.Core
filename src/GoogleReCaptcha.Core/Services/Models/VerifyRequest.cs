@@ -3,17 +3,17 @@
 	using System.Text.Json.Serialization;
 
 	/// <summary>
-	/// Model of Google's ReCaptcha verify request
+	/// Model of Google's reCAPTCHA verify request
 	/// </summary>
 	public class VerifyRequest
 	{
 		/// <summary>
-		/// Required: The shared key between your site and ReCaptcha
+		/// Required: The shared key between your site and reCAPTCHA
 		/// </summary>
 		public string Secret { get; set; }
 
 		/// <summary>
-		/// The user's response token provided by the ReCaptcha client-side integration on your site
+		/// The user's response token provided by the reCAPTCHA client-side integration on your site
 		/// </summary>
 		public string Response { get; set; }
 

@@ -6,7 +6,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Tag helper to assist in getting Google Lib/JS url into script tag
+    /// Tag helper to assist in getting Google reCAPTCHA Lib/JS url into script tag
     /// </summary>
     [HtmlTargetElement(TAG)]
     [HtmlTargetElement("script", Attributes = ATTR_FROMSETTINGS)]
@@ -49,7 +49,7 @@
         #region Properties
 
         /// <summary>
-        /// Gets the recaptcha settings to use for this tag's output
+        /// Gets the reCAPTCHA settings to use for this tag's output
         /// </summary>
         protected IReCaptchaSettings Settings { get; }
 
@@ -87,7 +87,7 @@
         #region Constructor
 
         /// <summary>
-        /// ReCaptcha script tag helper
+        /// reCAPTCHA script tag helper
         /// </summary>
         /// <param name="logger">Generic logger</param>
         /// <param name="settings">Settings object</param>

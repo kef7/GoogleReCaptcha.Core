@@ -33,7 +33,7 @@
         #region Methods
 
         /// <summary>
-        /// Get and merge CSS class attributes present with default class attributes required for Google ReCaptcha
+        /// Get and merge CSS class attributes present with default class attributes required for Google reCAPTCHA
         /// </summary>
         /// <param name="context">Tag helper context of the tag being processed</param>
         /// <param name="defaultClassAttrs">Default set of CSS classes separated by spaces</param>

@@ -10,7 +10,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Service collection extensions for ReCaptcha V3 usage
+    /// Service collection extensions for reCAPTCHA v3 usage
     /// </summary>
     public static class ServiceCollectionExtensions
     {
@@ -23,10 +23,10 @@
         #region Shared
 
         /// <summary>
-        /// Add services shared between V2 and V3
+        /// Add services shared between reCAPTCHA v2 and v3
         /// </summary>
         /// <param name="services">Service collection object used to add services</param>
-        /// <param name="settings">ReCaptcha root settings object</param>
+        /// <param name="settings">reCAPTCHA root settings object</param>
         private static void AddSharedServices(IServiceCollection services, IReCaptchaSettings settings)
         {
             // Add root settings for DI
@@ -127,10 +127,10 @@
         }
 
         /// <summary>
-        /// Adds base V2 services
+        /// Adds base reCAPTCHA v2 services
         /// </summary>
-        /// <param name="services">Service colleciont to use to add support too</param>
-        /// <param name="settings">ReCaptcha settings to use for service</param>
+        /// <param name="services">Service collection to use to add support too</param>
+        /// <param name="settings">reCAPTCHA settings to use for service</param>
         private static void AddV2BaseServices(IServiceCollection services, ReCaptchaV2Settings settings)
         {
             // Process settings
@@ -160,11 +160,11 @@
         }
 
         /// <summary>
-        /// Add ReCaptcha V2 services support
+        /// Add reCAPTCHA v2 services support
         /// </summary>
-        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="this">Service collection to use to add support too</param>
         /// <param name="config">Current configuration</param>
-        /// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+        /// <param name="settingsKey">Settings configuration key where reCAPTCHA settings are in <paramref name="config"/></param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
@@ -185,10 +185,10 @@
         }
 
         /// <summary>
-        /// Add ReCaptcha V2 services support
+        /// Add reCAPTCHA v2 services support
         /// </summary>
-        /// <param name="this">Service colleciont to use to add support too</param>
-        /// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="getSettingsAction">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
@@ -273,10 +273,10 @@
         }
 
         /// <summary>
-        /// Adds base V3 services
+        /// Adds base reCAPTCHA v3 services
         /// </summary>
-        /// <param name="services">Service colleciont to use to add support too</param>
-        /// <param name="settings">ReCaptcha settings to use for service</param>
+        /// <param name="services">Service collection to use to add support too</param>
+        /// <param name="settings">reCAPTCHA settings to use for service</param>
         private static void AddV3BaseServices(IServiceCollection services, ReCaptchaV3Settings settings)
         {
             // Process settings
@@ -319,11 +319,11 @@
         }
 
         /// <summary>
-        /// Add ReCaptcha V3 services support
+        /// Add reCAPTCHA v3 services support
         /// </summary>
-        /// <param name="this">Service colleciont to use to add support too</param>
+        /// <param name="this">Service collection to use to add support too</param>
         /// <param name="config">Current configuration</param>
-        /// <param name="settingsKey">Settings configuration key where ReCaptcha settings are in <paramref name="config"/></param>
+        /// <param name="settingsKey">Settings configuration key where reCAPTCHA settings are in <paramref name="config"/></param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
@@ -344,10 +344,10 @@
         }
 
         /// <summary>
-        /// Add ReCaptcha V3 services support
+        /// Add reCAPTCHA v3 services support
         /// </summary>
-        /// <param name="this">Service colleciont to use to add support too</param>
-        /// <param name="getSettingsAction">Function called that will return ReCaptcha settings to use</param>
+        /// <param name="this">Service collection to use to add support too</param>
+        /// <param name="getSettingsAction">Function called that will return reCAPTCHA settings to use</param>
         /// <remarks>
         /// Last `AddGoogleReCaptchaV#` called will set settings IReCaptchaSettings DI with its own settings object
         /// </remarks>
