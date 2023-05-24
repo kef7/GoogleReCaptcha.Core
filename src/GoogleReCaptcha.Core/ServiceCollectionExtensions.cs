@@ -10,7 +10,7 @@
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Service collection extensions for ReCaptcah V3 usage
+    /// Service collection extensions for ReCaptcha V3 usage
     /// </summary>
     public static class ServiceCollectionExtensions
     {
@@ -23,10 +23,10 @@
         #region Shared
 
         /// <summary>
-        /// Add services shared between V2 & V3
+        /// Add services shared between V2 and V3
         /// </summary>
         /// <param name="services">Service collection object used to add services</param>
-        /// <param name="settings">ReCaptcah root settings object</param>
+        /// <param name="settings">ReCaptcha root settings object</param>
         private static void AddSharedServices(IServiceCollection services, IReCaptchaSettings settings)
         {
             // Add root settings for DI
